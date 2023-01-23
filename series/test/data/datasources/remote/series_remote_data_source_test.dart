@@ -8,8 +8,8 @@ import 'package:series/data/datasources/remote/series_remote_data_source.dart';
 import 'package:series/data/models/series_detail_model.dart';
 import 'package:series/data/models/series_response.dart';
 
-import '../../../helpers/json_reader.dart';
 import '../../../helpers/test_http_helper.mocks.dart';
+import '../../../json_reader.dart';
 
 void main() {
   const API_KEY = 'api_key=b807fc0668b99af6a06ea5e34423da26';

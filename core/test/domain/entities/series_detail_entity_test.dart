@@ -1,6 +1,6 @@
 import 'package:core/domain/entities/genre.dart';
-import 'package:core/domain/entities/series_detail.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:series/domain/entities/series_detail.dart';
 
 import '../../dummy_data/dummy_objects.dart';
 

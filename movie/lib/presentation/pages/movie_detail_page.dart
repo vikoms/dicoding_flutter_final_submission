@@ -66,7 +66,7 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
                 child: DetailContent(
                   state.movieDetail!,
                   state.movieRecommendations,
-                  state.isAddedToWatchlist, // passing is added
+                  state.isAddedToWatchlist,
                 ),
               );
             } else if (state.movieState == RequestState.Error) {

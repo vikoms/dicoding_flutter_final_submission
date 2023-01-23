@@ -1,0 +1,28 @@
+{
+    "page": 1,
+    "results": [{
+        "adult": false,
+        "backdrop_path": "/1rO4xoCo4Z5WubK0OwdVll3DPYo.jpg",
+        "id": 84773,
+        "name": "The Lord of the Rings: The Rings of Power",
+        "original_language": "en",
+        "original_name": "The Lord of the Rings: The Rings of Power",
+        "overview": "Overview",
+        "poster_path": "/mYLOqiStMxDK3fYZFirgrMt8z5d.jpg",
+        "media_type": "tv",
+        "genre_ids": [
+            10765,
+            10759,
+            18
+        ],
+        "popularity": 5388.974,
+        "first_air_date": "2022-09-01",
+        "vote_average": 7.675,
+        "vote_count": 924,
+        "origin_country": [
+            "US"
+        ]
+    }],
+    "total_pages": 2,
+    "total_results": 40
+}

@@ -37,7 +37,7 @@ void main() {
     popularity: 10.0,
     posterPath: '/path/to/poster.jpg',
     releaseDate: '2022-01-01',
-    title: 'Movie Title',
+    title: 'spiderman',
     video: false,
     voteAverage: 8.0,
     voteCount: 1000,
@@ -68,7 +68,7 @@ void main() {
   blocTest<SearchBloc, SearchState>(
       'emits [Loading,Error] when get search is unsuccessfully.',
       build: () {
-        when(mockSearchSeries.execute(tQuery))
+        when(mockSearchMovies.execute(tQuery))
             .thenAnswer((_) async => Left(ServerFailure('Server Failure')));
         return searchBloc;
       },

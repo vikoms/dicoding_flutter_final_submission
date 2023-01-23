@@ -8,7 +8,6 @@ import '../../domain/entities/movie.dart';
 import '../../domain/entities/movie_detail.dart';
 import '../bloc/movie_detail/movie_detail_bloc.dart';
 import '../pages/movie_detail_page.dart';
-import '../providers/movie_detail_notifier.dart';
 
 class DetailContent extends StatelessWidget {
   final MovieDetail movie;

@@ -6,7 +6,6 @@ import '../../models/series_table.dart';
 abstract class SeriesLocalDataSource {
   Future<String> insertWatchlist(WatchlistTable watchList);
   Future<String> removeWatchlist(WatchlistTable watchList);
-  Future<List<WatchlistTable>> getWatchlist();
   Future<void> cacheNowPlayingSeries(List<SeriesTable> series);
   Future<void> cachePopularSeries(List<SeriesTable> series);
   Future<void> cacheTopRatedSeries(List<SeriesTable> series);
@@ -38,12 +37,6 @@ class SeriesLocalDataSourceImpl implements SeriesLocalDataSource {
     } catch (e) {
       throw DatabaseException(e.toString());
     }
-  }
-
-  @override
-  Future<List<WatchlistTable>> getWatchlist() async {
-    final result = await databaseHelper.getWatchlist();
-    return result.map((data) => WatchlistTable.fromMap(data)).toList();
   }
 
   @override

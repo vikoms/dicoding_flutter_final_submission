@@ -1,5 +1,6 @@
 import 'package:about/about_page.dart';
 import 'package:core/core.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie/presentation/bloc/movie_detail/movie_detail_bloc.dart';
 import 'package:movie/presentation/bloc/now_playing_movie/now_playing_movie_bloc.dart';
@@ -39,8 +40,13 @@ import 'package:series/presentation/route_arguments/series_list_arguments.dart';
 import 'package:watchlist/presentation/bloc/watchlist/watchlist_bloc.dart';
 import 'package:watchlist/presentation/pages/watchlist_page.dart';
 
+import 'firebase_options.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await HttpSSLPinning.init();
   di.init();
   runApp(MyApp());

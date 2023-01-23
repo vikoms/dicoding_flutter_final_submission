@@ -218,6 +218,22 @@ void main() {
         verify(mockRemoteDataSource.getPopularSeries());
         expect(result, equals(Left(ServerFailure(''))));
       });
+
+      test(
+          'should return socket exception when the call to remote data source is unsuccessful',
+          () async {
+        // arrange
+        when(mockRemoteDataSource.getPopularSeries())
+            .thenThrow(SocketException('Failed to connect to the network'));
+        // act
+        final result = await repository.getPopularSeries();
+        // assert
+        verify(mockRemoteDataSource.getPopularSeries());
+        expect(
+            result,
+            equals(
+                Left(ConnectionFailure('Failed to connect to the network'))));
+      });
     });
 
     group('when device s offline', () {
@@ -310,6 +326,22 @@ void main() {
         // assert
         verify(mockRemoteDataSource.getTopRatedSeries());
         expect(result, equals(Left(ServerFailure(''))));
+      });
+
+      test(
+          'should return socket exception when the call to remote data source is unsuccessful',
+          () async {
+        // arrange
+        when(mockRemoteDataSource.getTopRatedSeries())
+            .thenThrow(SocketException('Failed to connect to the network'));
+        // act
+        final result = await repository.getTopRatedSeries();
+        // assert
+        verify(mockRemoteDataSource.getTopRatedSeries());
+        expect(
+            result,
+            equals(
+                Left(ConnectionFailure('Failed to connect to the network'))));
       });
     });
 

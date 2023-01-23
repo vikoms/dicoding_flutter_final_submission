@@ -4,7 +4,6 @@ import 'package:core/utils/routes.dart';
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/movie.dart';
-import '../pages/movie_detail_page.dart';
 
 class MovieCard extends StatelessWidget {
   final Movie movie;

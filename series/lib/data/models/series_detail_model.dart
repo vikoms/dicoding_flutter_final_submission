@@ -118,45 +118,6 @@ class SeriesDetailResponse extends Equatable {
         voteAverage: json["vote_average"].toDouble(),
         voteCount: json["vote_count"],
       );
-
-  Map<String, dynamic> toJson() => {
-        "adult": adult,
-        "backdrop_path": backdropPath,
-        "created_by": List<dynamic>.from(createdBy.map((x) => x.toJson())),
-        "episode_run_time": List<dynamic>.from(episodeRunTime.map((x) => x)),
-        "first_air_date": firstAirDate,
-        "genres": List<dynamic>.from(genres.map((x) => x.toJson())),
-        "homepage": homepage,
-        "id": id,
-        "in_production": inProduction,
-        "languages": List<dynamic>.from(languages.map((x) => x)),
-        "last_air_date": lastAirDate,
-        "last_episode_to_air": lastEpisodeToAir.toJson(),
-        "name": name,
-        "next_episode_to_air": nextEpisodeToAir,
-        "networks": List<dynamic>.from(networks.map((x) => x.toJson())),
-        "number_of_episodes": numberOfEpisodes,
-        "number_of_seasons": numberOfSeasons,
-        "origin_country": List<dynamic>.from(originCountry.map((x) => x)),
-        "original_language": originalLanguage,
-        "original_name": originalName,
-        "overview": overview,
-        "popularity": popularity,
-        "poster_path": posterPath,
-        "production_companies":
-            List<dynamic>.from(productionCompanies.map((x) => x.toJson())),
-        "production_countries":
-            List<dynamic>.from(productionCountries.map((x) => x.toJson())),
-        "seasons": List<dynamic>.from(seasons.map((x) => x.toJson())),
-        "spoken_languages":
-            List<dynamic>.from(spokenLanguages.map((x) => x.toJson())),
-        "status": status,
-        "tagline": tagline,
-        "type": type,
-        "vote_average": voteAverage,
-        "vote_count": voteCount,
-      };
-
   SeriesDetail toEntity() {
     return SeriesDetail(
       adult: this.adult,
@@ -347,13 +308,6 @@ class Model extends Equatable {
         originCountry: json["origin_country"],
       );
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "logo_path": logoPath == null ? null : logoPath,
-        "origin_country": originCountry,
-      };
-
   @override
   List<Object?> get props => [
         id,
@@ -377,11 +331,6 @@ class ProductionCountryModel extends Equatable {
         iso31661: json["iso_3166_1"],
         name: json["name"],
       );
-
-  Map<String, dynamic> toJson() => {
-        "iso_3166_1": iso31661,
-        "name": name,
-      };
 
   @override
   List<Object?> get props => [
@@ -418,16 +367,6 @@ class SeasonModel extends Equatable {
         posterPath: json["poster_path"],
         seasonNumber: json["season_number"],
       );
-
-  Map<String, dynamic> toJson() => {
-        "air_date": airDate,
-        "episode_count": episodeCount,
-        "id": id,
-        "name": name,
-        "overview": overview,
-        "poster_path": posterPath,
-        "season_number": seasonNumber,
-      };
 
   Season toEntity() {
     return Season(

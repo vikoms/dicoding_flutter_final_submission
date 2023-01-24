@@ -55,21 +55,6 @@ class _HomeSeriesPageState extends State<HomeSeriesPage> {
                   ),
                 },
               ),
-              // Consumer<SeriesListNotifier>(
-              //   builder: (context, data, child) {
-              //     final state = data.nowPlayingState;
-              //     if (state == RequestState.Loading) {
-              //       return Center(
-              //         child: CircularProgressIndicator(),
-              //       );
-              //     } else if (state == RequestState.Loaded) {
-              //       return ItemList(data.nowPlayingSeries, false);
-              //     } else {
-              //       return Text('Failed');
-              //     }
-              //   },
-              // ),
-
               BlocBuilder<NowPlayingSeriesBloc, NowPlayingSeriesState>(
                 builder: (context, state) {
                   if (state is NowPlayingSeriesLoading) {
@@ -78,6 +63,15 @@ class _HomeSeriesPageState extends State<HomeSeriesPage> {
                     );
                   } else if (state is NowPlayingSeriesLoaded) {
                     return ItemList(state.nowPlayingSeries, false);
+                  } else if (state is NowPlayingSeriesError) {
+                    return Center(
+                      child: Text(
+                        state.errorMessage,
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    );
                   } else {
                     return Center(
                       child: Text(
@@ -101,21 +95,6 @@ class _HomeSeriesPageState extends State<HomeSeriesPage> {
                   ),
                 },
               ),
-              // Consumer<SeriesListNotifier>(
-              //   builder: (context, data, child) {
-              //     final state = data.popularState;
-              //     if (state == RequestState.Loading) {
-              //       return Center(
-              //         child: CircularProgressIndicator(),
-              //       );
-              //     } else if (state == RequestState.Loaded) {
-              //       return ItemList(data.popularSeries, false);
-              //     } else {
-              //       return Text('Failed');
-              //     }
-              //   },
-              // ),
-
               BlocBuilder<PopularSeriesBloc, PopularSeriesState>(
                 builder: (context, state) {
                   if (state is PopularSeriesLoading) {
@@ -124,6 +103,15 @@ class _HomeSeriesPageState extends State<HomeSeriesPage> {
                     );
                   } else if (state is PopularSeriesLoaded) {
                     return ItemList(state.popularSeries, false);
+                  } else if (state is PopularSeriesError) {
+                    return Center(
+                      child: Text(
+                        state.errorMessage,
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    );
                   } else {
                     return Center(
                       child: Text(
@@ -145,21 +133,6 @@ class _HomeSeriesPageState extends State<HomeSeriesPage> {
                   ),
                 },
               ),
-              // Consumer<SeriesListNotifier>(
-              //   builder: (context, data, child) {
-              //     final state = data.topRatedState;
-              //     if (state == RequestState.Loading) {
-              //       return Center(
-              //         child: CircularProgressIndicator(),
-              //       );
-              //     } else if (state == RequestState.Loaded) {
-              //       return ItemList(data.topRatedSeries, false);
-              //     } else {
-              //       return Text('Failed');
-              //     }
-              //   },
-              // ),
-
               BlocBuilder<TopRatedSeriesBloc, TopRatedSeriesState>(
                 builder: (context, state) {
                   if (state is TopRatedSeriesLoading) {
@@ -168,6 +141,15 @@ class _HomeSeriesPageState extends State<HomeSeriesPage> {
                     );
                   } else if (state is TopRatedSeriesLoaded) {
                     return ItemList(state.topRatedSeries, false);
+                  } else if (state is TopRatedSeriesError) {
+                    return Center(
+                      child: Text(
+                        state.errorMessage,
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    );
                   } else {
                     return Center(
                       child: Text(

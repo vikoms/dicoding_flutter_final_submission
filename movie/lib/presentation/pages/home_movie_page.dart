@@ -55,6 +55,15 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
                     );
                   } else if (state is NowPlayingMoviesLoaded) {
                     return ItemList(state.movies, true);
+                  } else if (state is NowPlayingMoviesError) {
+                    return Center(
+                      child: Text(
+                        state.errorMessage,
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    );
                   } else {
                     return const Center(
                       child: Text(
@@ -86,6 +95,15 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
                     );
                   } else if (state is PopularMovieLoaded) {
                     return ItemList(state.movies, true);
+                  } else if (state is PopularMovieError) {
+                    return Center(
+                      child: Text(
+                        state.errorMessage,
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    );
                   } else {
                     return const Center(
                       child: Text(
@@ -117,6 +135,15 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
                     );
                   } else if (state is TopRatedMovieLoaded) {
                     return ItemList(state.movies, true);
+                  } else if (state is TopRatedMovieError) {
+                    return Center(
+                      child: Text(
+                        state.errorMessage,
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    );
                   } else {
                     return const Center(
                       child: Text(

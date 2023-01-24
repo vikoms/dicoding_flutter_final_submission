@@ -48,9 +48,9 @@ class _SeriesListPageState extends State<SeriesListPage> {
   }
 
   Widget _buildContent(SeriesListArguments params) {
-    if (params.type == MovieListEnum.NowPlaying) {
+    if (params.type == SeriesListEnum.NowPlaying) {
       return _buildNowPlayingSeries();
-    } else if (params.type == MovieListEnum.Popular) {
+    } else if (params.type == SeriesListEnum.Popular) {
       return _buildPopularSeries();
     } else {
       return _buildTopRatedSeries();
@@ -72,6 +72,15 @@ class _SeriesListPageState extends State<SeriesListPage> {
               return SeriesCard(series);
             },
             itemCount: state.nowPlayingSeries.length,
+          );
+        } else if (state is NowPlayingSeriesError) {
+          return Center(
+            child: Text(
+              state.errorMessage,
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
           );
         } else {
           return Center(
@@ -103,6 +112,15 @@ class _SeriesListPageState extends State<SeriesListPage> {
             },
             itemCount: state.popularSeries.length,
           );
+        } else if (state is PopularSeriesError) {
+          return Center(
+            child: Text(
+              state.errorMessage,
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          );
         } else {
           return Center(
             key: const Key('error_message'),
@@ -132,6 +150,15 @@ class _SeriesListPageState extends State<SeriesListPage> {
               return SeriesCard(Series);
             },
             itemCount: state.topRatedSeries.length,
+          );
+        } else if (state is TopRatedSeriesError) {
+          return Center(
+            child: Text(
+              state.errorMessage,
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
           );
         } else {
           return Center(

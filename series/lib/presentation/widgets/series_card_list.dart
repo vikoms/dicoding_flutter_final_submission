@@ -7,7 +7,8 @@ import '../pages/series_detail_page.dart';
 
 class SeriesCard extends StatelessWidget {
   final Series series;
-  const SeriesCard(this.series);
+  final bool isSeriesRecommendations;
+  const SeriesCard(this.series, [this.isSeriesRecommendations = false]);
 
   @override
   Widget build(BuildContext context) {
@@ -15,11 +16,19 @@ class SeriesCard extends StatelessWidget {
       margin: EdgeInsets.symmetric(vertical: 4),
       child: InkWell(
         onTap: () {
-          Navigator.pushNamed(
-            context,
-            SeriesDetailPage.ROUTE_NAME,
-            arguments: series.id,
-          );
+          if (!isSeriesRecommendations) {
+            Navigator.pushNamed(
+              context,
+              SeriesDetailPage.ROUTE_NAME,
+              arguments: series.id,
+            );
+          } else {
+            Navigator.pushReplacementNamed(
+              context,
+              SeriesDetailPage.ROUTE_NAME,
+              arguments: series.id,
+            );
+          }
         },
         child: Stack(
           alignment: Alignment.bottomLeft,

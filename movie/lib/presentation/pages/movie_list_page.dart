@@ -78,6 +78,15 @@ class _MovieListPageState extends State<MovieListPage> {
             },
             itemCount: state.movies.length,
           );
+        } else if (state is NowPlayingMoviesError) {
+          return Center(
+            child: Text(
+              state.errorMessage,
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          );
         } else {
           return Center(
             key: const Key('error_message'),
@@ -107,6 +116,15 @@ class _MovieListPageState extends State<MovieListPage> {
             },
             itemCount: state.movies.length,
           );
+        } else if (state is PopularMovieError) {
+          return Center(
+            child: Text(
+              state.errorMessage,
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          );
         } else {
           return Center(
             key: const Key('error_message'),
@@ -135,6 +153,15 @@ class _MovieListPageState extends State<MovieListPage> {
               return MovieCard(movie);
             },
             itemCount: state.movies.length,
+          );
+        } else if (state is TopRatedMovieError) {
+          return Center(
+            child: Text(
+              state.errorMessage,
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
           );
         } else {
           return Center(

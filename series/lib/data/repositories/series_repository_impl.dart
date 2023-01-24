@@ -33,6 +33,8 @@ class SeriesRepositoryImpl implements SeriesRepository {
         return Left(ServerFailure(''));
       } on SocketException {
         return Left(ConnectionFailure('Failed to connect to the network'));
+      } on TlsException {
+        return Left(SSLFailure('Certificate Verification Failed'));
       }
     } else {
       try {
@@ -60,6 +62,8 @@ class SeriesRepositoryImpl implements SeriesRepository {
         return Left(
           ConnectionFailure("Failed to connect to the network"),
         );
+      } on TlsException {
+        return Left(SSLFailure('Certificate Verification Failed'));
       }
     } else {
       try {
@@ -101,6 +105,8 @@ class SeriesRepositoryImpl implements SeriesRepository {
         );
       } on SocketException {
         return Left(ConnectionFailure("Failed to connect to the network"));
+      } on TlsException {
+        return Left(SSLFailure('Certificate Verification Failed'));
       }
     } else {
       try {

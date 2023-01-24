@@ -124,7 +124,7 @@ class SeriesDetailContent extends StatelessWidget {
                                 physics: NeverScrollableScrollPhysics(),
                                 itemBuilder: (context, index) {
                                   final series = recommendations[index];
-                                  return SeriesCard(series);
+                                  return SeriesCard(series, true);
                                 },
                                 itemCount: recommendations.length,
                               ),

@@ -34,6 +34,10 @@ dependencies:
   flutter_bloc: ^8.0.0
   firebase_core: ^2.4.1
   firebase_crashlytics: ^3.0.8
+  animated_notch_bottom_bar: ^0.0.6
+  carousel_slider: ^4.2.1
+  intl: ^0.18.0
+  webview_flutter: ^3.0.4
 
   sqflite_sqlcipher: ^2.1.1+1
   encrypt: ^5.0.1
@@ -43,17 +47,19 @@ dependencies:
       ref: master
 
   about:
-    path: about
+    path: packages/about
   core:
-    path: core
+    path: packages/core
   search:
-    path: search
+    path: packages/search
   movie:
-    path: movie
+    path: packages/movie
   series:
-    path: series
+    path: packages/series
   watchlist:
-    path: watchlist
+    path: packages/watchlist
+  trailer:
+    path: packages/trailer
 
 dev_dependencies:
   flutter_test:

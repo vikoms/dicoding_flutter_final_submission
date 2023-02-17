@@ -50,20 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDgXyph5ZjGHwQYsPADYNYRPKWRfhEdXIM',
-    appId: '1:412999685810:android:216786a6982659e3ccdbab',
-    messagingSenderId: '412999685810',
-    projectId: 'ditonton-final-submissio-a8b0c',
-    storageBucket: 'ditonton-final-submissio-a8b0c.appspot.com',
+    apiKey: 'AIzaSyA6WS9jcQ0DiVHHW56pn_f-Lgu5Ok-lCmw',
+    appId: '1:130077390626:android:2ad800dd17e338666c177b',
+    messagingSenderId: '130077390626',
+    projectId: 'moflix-d504b',
+    storageBucket: 'moflix-d504b.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAQRV5jHOIVOjnZdvSwpkTOT4Ni4WFvl-o',
-    appId: '1:412999685810:ios:826efe9cb1de1c97ccdbab',
-    messagingSenderId: '412999685810',
-    projectId: 'ditonton-final-submissio-a8b0c',
-    storageBucket: 'ditonton-final-submissio-a8b0c.appspot.com',
-    iosClientId: '412999685810-dv7a177653r2t9bdnir6tk631tfacu0v.apps.googleusercontent.com',
+    apiKey: 'AIzaSyB9mbqPJBIas7jXvxtd-ktb_QTnqPcA9A8',
+    appId: '1:130077390626:ios:3a7111a7546c1fda6c177b',
+    messagingSenderId: '130077390626',
+    projectId: 'moflix-d504b',
+    storageBucket: 'moflix-d504b.appspot.com',
+    iosClientId: '130077390626-fm26vnbblfke1k6ve512isncn9um8luv.apps.googleusercontent.com',
     iosBundleId: 'com.dicoding.ditonton',
   );
 }

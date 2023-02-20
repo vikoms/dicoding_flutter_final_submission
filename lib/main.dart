@@ -2,6 +2,7 @@ import 'package:about/about_page.dart';
 import 'package:core/core.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie/presentation/bloc/home_movie/home_movie_bloc.dart';
 import 'package:movie/presentation/bloc/movie_detail/movie_detail_bloc.dart';
 import 'package:movie/presentation/bloc/now_playing_movie/now_playing_movie_bloc.dart';
 import 'package:movie/presentation/bloc/popular_movie/popular_movie_bloc.dart';
@@ -11,12 +12,6 @@ import 'package:movie/presentation/pages/movie_detail_page.dart';
 import 'package:movie/presentation/pages/movie_list_page.dart';
 import 'package:movie/presentation/pages/popular_movies_page.dart';
 import 'package:movie/presentation/pages/top_rated_movies_page.dart';
-import 'package:movie/presentation/providers/movie_detail_notifier.dart';
-import 'package:movie/presentation/providers/movie_list_notifier.dart';
-import 'package:movie/presentation/providers/popular_movies_notifier.dart';
-import 'package:movie/presentation/providers/single_movie_list_notifier.dart';
-import 'package:movie/presentation/providers/top_rated_movies_notifier.dart';
-import 'package:movie/presentation/providers/watchlist_movie_notifier.dart';
 import 'package:movie/presentation/route_arguments/movie_lis_arguments.dart';
 import 'package:search/presentation/bloc/bloc/search_bloc.dart';
 import 'package:search/search.dart';
@@ -27,16 +22,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:series/presentation/bloc/series_detail/series_detail_bloc.dart';
+import 'package:series/presentation/bloc/series_home/series_home_bloc.dart';
 import 'package:series/presentation/bloc/series_now_playing/now_playing_series_bloc.dart';
 import 'package:series/presentation/bloc/series_popular/popular_series_bloc.dart';
 import 'package:series/presentation/bloc/series_top_rated/top_rated_series_bloc.dart';
 import 'package:series/presentation/pages/home_series_page.dart';
 import 'package:series/presentation/pages/series_detail_page.dart';
 import 'package:series/presentation/pages/series_list_page.dart';
-import 'package:series/presentation/providers/series_detail_notifier.dart';
-import 'package:series/presentation/providers/series_list_notifier.dart';
-import 'package:series/presentation/providers/single_series_list_notifier.dart';
 import 'package:series/presentation/route_arguments/series_list_arguments.dart';
+import 'package:trailer/presentation/bloc/trailer_bloc.dart';
+import 'package:trailer/presentation/pages/trailer_page.dart';
+import 'package:trailer/presentation/pages/youtube_page.dart';
 import 'package:watchlist/presentation/bloc/watchlist/watchlist_bloc.dart';
 import 'package:watchlist/presentation/pages/watchlist_page.dart';
 
@@ -86,10 +82,20 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => di.locator<WatchlistBloc>(),
-        )
+        ),
+        BlocProvider(
+          create: (context) => di.locator<HomeMovieBloc>(),
+        ),
+        BlocProvider(
+          create: (context) => di.locator<SeriesHomeBloc>(),
+        ),
+        BlocProvider(
+          create: (context) => di.locator<TrailerBloc>(),
+        ),
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Moflix',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData.dark().copyWith(
           colorScheme: kColorScheme,
           primaryColor: kRichBlack,
@@ -97,9 +103,10 @@ class MyApp extends StatelessWidget {
           textTheme: kTextTheme,
         ),
         home: Material(
-          child: CustomDrawer(
-            content: HomePage(),
-          ),
+          // child: CustomDrawer(
+          //   content: HomePage(),
+          // ),
+          child: HomePage(),
         ),
         navigatorObservers: [routeObserver],
         onGenerateRoute: (RouteSettings settings) {
@@ -147,6 +154,19 @@ class MyApp extends StatelessWidget {
               return MaterialPageRoute(builder: (_) => WatchlistPage());
             case AboutPage.ROUTE_NAME:
               return MaterialPageRoute(builder: (_) => AboutPage());
+
+            case TrailerPage.ROUTE_NAME:
+              final args = settings.arguments as TrailerArgs;
+              return MaterialPageRoute(
+                builder: (_) => TrailerPage(
+                  args: args,
+                ),
+              );
+
+            case YoutubePage.ROUTE_NAME:
+              final videoId = settings.arguments as String;
+              return MaterialPageRoute(
+                  builder: (_) => YoutubePage(videoId: videoId));
             default:
               return MaterialPageRoute(builder: (_) {
                 return Scaffold(

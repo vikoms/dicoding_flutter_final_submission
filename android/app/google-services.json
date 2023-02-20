@@ -1,37 +1,37 @@
 {
   "project_info": {
-    "project_number": "412999685810",
-    "project_id": "ditonton-final-submissio-a8b0c",
-    "storage_bucket": "ditonton-final-submissio-a8b0c.appspot.com"
+    "project_number": "130077390626",
+    "project_id": "moflix-d504b",
+    "storage_bucket": "moflix-d504b.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:412999685810:android:216786a6982659e3ccdbab",
+        "mobilesdk_app_id": "1:130077390626:android:2ad800dd17e338666c177b",
         "android_client_info": {
-          "package_name": "com.dicoding.ditonton"
+          "package_name": "com.viko.moflix"
         }
       },
       "oauth_client": [
         {
-          "client_id": "412999685810-fek50jq3uhti048ho70lov7vshaujoj9.apps.googleusercontent.com",
+          "client_id": "130077390626-e4rqih26au5jotftm6ruime3tjfk88q2.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDgXyph5ZjGHwQYsPADYNYRPKWRfhEdXIM"
+          "current_key": "AIzaSyA6WS9jcQ0DiVHHW56pn_f-Lgu5Ok-lCmw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "412999685810-fek50jq3uhti048ho70lov7vshaujoj9.apps.googleusercontent.com",
+              "client_id": "130077390626-e4rqih26au5jotftm6ruime3tjfk88q2.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "412999685810-dv7a177653r2t9bdnir6tk631tfacu0v.apps.googleusercontent.com",
+              "client_id": "130077390626-fm26vnbblfke1k6ve512isncn9um8luv.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.dicoding.ditonton"

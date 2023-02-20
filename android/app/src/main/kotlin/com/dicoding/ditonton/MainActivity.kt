@@ -1,4 +1,4 @@
-package com.dicoding.ditonton
+package com.viko.moflix
 
 import io.flutter.embedding.android.FlutterActivity
 

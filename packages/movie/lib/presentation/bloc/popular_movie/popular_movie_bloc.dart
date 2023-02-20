@@ -16,57 +16,54 @@ class PopularMovieBloc extends Bloc<PopularMovieEvent, PopularMovieState> {
     this.getPopularMovies,
     this.networkInfo,
   ) : super(PopularMovieInitial()) {
-    int page = 1;
+    int _page = 1;
+    bool _hasNextPage = true;
+
     on<OnGetPopularMovies>((event, emit) async {
-      page = 1;
-      emit(PopularMovieLoading());
-      final result = await getPopularMovies.execute();
-      result.fold((error) {
-        emit(
-          PopularMovieError(error.message),
-        );
-      }, (movies) {
-        page++;
-        emit(
-          PopularMovieLoaded(
-            movies: movies,
-          ),
-        );
-      });
-    });
-
-    on<OnGetMorePopularMovies>((event, emit) async {
       final isConnected = await networkInfo.isConnected;
-      if (!isConnected) {
-        return;
+      if (_hasNextPage) {
+        try {
+          if (state is PopularMovieInitial) {
+            emit(PopularMovieLoading());
+            final movieInit = await getPopularMovies.execute();
+            movieInit.fold((error) {
+              emit(PopularMovieError(errorMessage: error.message));
+            }, (movies) {
+              emit(PopularMovieLoaded(
+                movies: movies,
+                hasReachedMax: false,
+              ));
+            });
+          } else if (state is PopularMovieLoaded && isConnected) {
+            _page++;
+            final moreMovies = await getPopularMovies.execute(page: _page);
+            moreMovies.fold((error) {
+              emit(
+                PopularMovieError(
+                  errorMessage: error.message,
+                ),
+              );
+            }, (movies) {
+              if (movies.isEmpty) {
+                _hasNextPage = false;
+                emit((state as PopularMovieLoaded)
+                    .copyWith(hasReachedMax: true));
+              } else {
+                emit(PopularMovieLoaded(
+                  movies: (state as PopularMovieLoaded).movies + movies,
+                  hasReachedMax: false,
+                ));
+              }
+            });
+          }
+        } catch (ex) {
+          emit(
+            PopularMovieError(
+              errorMessage: ex.toString(),
+            ),
+          );
+        }
       }
-      if (state is! PopularMovieLoaded) {
-        return;
-      }
-
-      final currentState = state as PopularMovieLoaded;
-      if (currentState.hasReachedMax ||
-          currentState.pagingState == RequestState.Loading) {
-        return;
-      }
-
-      emit(currentState.copyWith(pagingState: RequestState.Loading));
-      final result = await getPopularMovies.execute(page: page);
-      result.fold((error) {
-        emit(
-          currentState.copyWith(
-            pagingState: RequestState.Error,
-            message: error.message,
-          ),
-        );
-      }, (movies) {
-        page++;
-        emit(currentState.copyWith(
-          movies: List.of(currentState.movies)..addAll(movies),
-          hasReachedMax: movies.isEmpty,
-          pagingState: RequestState.Loaded,
-        ));
-      });
     });
   }
 }

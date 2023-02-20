@@ -2,6 +2,7 @@ import 'package:core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:series/presentation/bloc/series_home/series_home_bloc.dart';
+import 'package:series/presentation/pages/series_detail_page.dart';
 import 'package:series/presentation/pages/series_list_page.dart';
 import 'package:series/presentation/route_arguments/series_list_arguments.dart';
 

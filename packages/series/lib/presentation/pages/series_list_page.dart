@@ -6,6 +6,7 @@ import '../bloc/series_now_playing/now_playing_series_bloc.dart';
 import '../bloc/series_popular/popular_series_bloc.dart';
 import '../bloc/series_top_rated/top_rated_series_bloc.dart';
 import '../route_arguments/series_list_arguments.dart';
+import '../widgets/bottom_loader.dart';
 import '../widgets/series_card_list.dart';
 
 class SeriesListPage extends StatefulWidget {
@@ -26,11 +27,12 @@ class _SeriesListPageState extends State<SeriesListPage> {
     super.initState();
     _scrollController.addListener(_onScroll);
     Future.microtask(() {
-      if (widget.arguments.type == SeriesListEnum.NowPlaying) {
+      final listType = widget.arguments.type;
+      if (listType == SeriesListEnum.NowPlaying) {
         context.read<NowPlayingSeriesBloc>().add(OnGetNowPlayingSeries());
-      } else if (widget.arguments.type == SeriesListEnum.TopRated) {
+      } else if (listType == SeriesListEnum.TopRated) {
         context.read<TopRatedSeriesBloc>().add(OnGetTopRatedSeries());
-      } else if (widget.arguments.type == SeriesListEnum.Popular) {
+      } else if (listType == SeriesListEnum.Popular) {
         context.read<PopularSeriesBloc>().add(OnGetPopularSeries());
       }
     });
@@ -44,15 +46,16 @@ class _SeriesListPageState extends State<SeriesListPage> {
       ),
       body: Padding(
         padding: EdgeInsets.all(8.0),
-        child: _buildContent(widget.arguments),
+        child: _buildContent(),
       ),
     );
   }
 
-  Widget _buildContent(SeriesListArguments params) {
-    if (params.type == SeriesListEnum.NowPlaying) {
+  Widget _buildContent() {
+    final listType = widget.arguments.type;
+    if (listType == SeriesListEnum.NowPlaying) {
       return _buildNowPlayingSeries();
-    } else if (params.type == SeriesListEnum.Popular) {
+    } else if (listType == SeriesListEnum.Popular) {
       return _buildPopularSeries();
     } else {
       return _buildTopRatedSeries();
@@ -71,15 +74,15 @@ class _SeriesListPageState extends State<SeriesListPage> {
           return ListView.builder(
             controller: _scrollController,
             itemBuilder: (context, index) {
-              if (index >= state.nowPlayingSeries.length) {
+              if (index >= state.series.length) {
                 return const BottomLoader();
               }
-              final series = state.nowPlayingSeries[index];
+              final series = state.series[index];
               return SeriesCard(series);
             },
             itemCount: state.hasReachedMax
-                ? state.nowPlayingSeries.length
-                : state.nowPlayingSeries.length + 1,
+                ? state.series.length
+                : state.series.length + 1,
           );
         } else if (state is NowPlayingSeriesError) {
           return Center(
@@ -116,15 +119,15 @@ class _SeriesListPageState extends State<SeriesListPage> {
           return ListView.builder(
             controller: _scrollController,
             itemBuilder: (context, index) {
-              if (index >= state.popularSeries.length) {
+              if (index >= state.series.length) {
                 return const BottomLoader();
               }
-              final series = state.popularSeries[index];
+              final series = state.series[index];
               return SeriesCard(series);
             },
             itemCount: state.hasReachedMax
-                ? state.popularSeries.length
-                : state.popularSeries.length + 1,
+                ? state.series.length
+                : state.series.length + 1,
           );
         } else if (state is PopularSeriesError) {
           return Center(
@@ -192,9 +195,9 @@ class _SeriesListPageState extends State<SeriesListPage> {
   void _onScroll() {
     if (_isBottom) {
       if (widget.arguments.type == SeriesListEnum.NowPlaying) {
-        context.read<NowPlayingSeriesBloc>().add(OnGetMoreNowPlayingSeries());
+        context.read<NowPlayingSeriesBloc>().add(OnGetNowPlayingSeries());
       } else if (widget.arguments.type == SeriesListEnum.Popular) {
-        context.read<PopularSeriesBloc>().add(OnGetMorePopularSeries());
+        context.read<PopularSeriesBloc>().add(OnGetPopularSeries());
       }
     }
   }
@@ -212,25 +215,5 @@ class _SeriesListPageState extends State<SeriesListPage> {
       ..removeListener(_onScroll)
       ..dispose();
     super.dispose();
-  }
-}
-
-class BottomLoader extends StatelessWidget {
-  const BottomLoader({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      child: const Center(
-        child: SizedBox(
-          width: 33,
-          height: 33,
-          child: CircularProgressIndicator(
-            strokeWidth: 1.5,
-          ),
-        ),
-      ),
-    );
   }
 }

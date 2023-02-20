@@ -16,64 +16,51 @@ class NowPlayingSeriesBloc
     this.getNowPlayingSeries,
     this.networkInfo,
   ) : super(NowPlayingSeriesInitial()) {
-    int page = 1;
+    int _page = 1;
+    bool _hasNextPage = true;
     on<OnGetNowPlayingSeries>((event, emit) async {
-      page = 1;
-      emit(NowPlayingSeriesLoading());
-      var result = await getNowPlayingSeries.execute();
-      result.fold((error) {
-        emit(
-          NowPlayingSeriesError(error.message),
-        );
-      }, (series) {
-        page++;
-        emit(
-          NowPlayingSeriesLoaded(
-            nowPlayingSeries: series,
-          ),
-        );
-      });
-    });
-
-    on<OnGetMoreNowPlayingSeries>((event, emit) async {
-      try {
-        bool isConnected = await networkInfo.isConnected;
-        if (!isConnected) {
-          return;
-        }
-        if (state is! NowPlayingSeriesLoaded) {
-          return;
-        }
-        final currentState = state as NowPlayingSeriesLoaded;
-
-        if (currentState.pagingState == RequestState.Loading ||
-            currentState.hasReachedMax) {
-          return;
-        }
-
-        emit(currentState.copyWith(pagingState: RequestState.Loading));
-
-        final result = await getNowPlayingSeries.execute(
-          page: page,
-        );
-
-        result.fold((error) {
-          emit(currentState.copyWith(pagingState: RequestState.Error));
-        }, (newMovies) {
-          page++;
-          emit(currentState.copyWith(
-            hasReachedMax: newMovies.isEmpty,
-            newSeries: List.of(currentState.nowPlayingSeries)
-              ..addAll(newMovies),
-            pagingState: RequestState.Loaded,
-          ));
-        });
-      } catch (e) {
-        if (state is NowPlayingSeriesLoaded) {
+      final isConnected = await networkInfo.isConnected;
+      if (_hasNextPage) {
+        try {
+          if (state is NowPlayingSeriesInitial) {
+            emit(NowPlayingSeriesLoading());
+            final seriesInit = await getNowPlayingSeries.execute();
+            seriesInit.fold((error) {
+              emit(NowPlayingSeriesError(errorMessage: error.message));
+            }, (series) {
+              emit(
+                NowPlayingSeriesLoaded(
+                  series: series,
+                  hasReachedMax: false,
+                ),
+              );
+            });
+          } else if (state is NowPlayingSeriesLoaded && isConnected) {
+            _page++;
+            final moreSerries = await getNowPlayingSeries.execute(page: _page);
+            moreSerries.fold((error) {
+              emit(
+                NowPlayingSeriesError(
+                  errorMessage: error.message,
+                ),
+              );
+            }, (series) {
+              if (series.isEmpty) {
+                _hasNextPage = false;
+                emit((state as NowPlayingSeriesLoaded)
+                    .copyWith(hasReachedMax: true));
+              } else {
+                emit(NowPlayingSeriesLoaded(
+                  series: (state as NowPlayingSeriesLoaded).series + series,
+                  hasReachedMax: false,
+                ));
+              }
+            });
+          }
+        } catch (ex) {
           emit(
-            (state as NowPlayingSeriesLoaded).copyWith(
-              pagingState: RequestState.Error,
-              message: e.toString(),
+            NowPlayingSeriesError(
+              errorMessage: ex.toString(),
             ),
           );
         }

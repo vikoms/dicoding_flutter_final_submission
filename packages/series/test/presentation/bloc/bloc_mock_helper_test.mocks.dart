@@ -117,11 +117,13 @@ class MockGetNowPlayingSeries extends _i1.Mock
         ),
       ) as _i2.SeriesRepository);
   @override
-  _i6.Future<_i3.Either<_i7.Failure, List<_i8.Series>>> execute() =>
+  _i6.Future<_i3.Either<_i7.Failure, List<_i8.Series>>> execute(
+          {int? page = 1}) =>
       (super.noSuchMethod(
         Invocation.method(
           #execute,
           [],
+          {#page: page},
         ),
         returnValue:
             _i6.Future<_i3.Either<_i7.Failure, List<_i8.Series>>>.value(
@@ -130,6 +132,7 @@ class MockGetNowPlayingSeries extends _i1.Mock
           Invocation.method(
             #execute,
             [],
+            {#page: page},
           ),
         )),
       ) as _i6.Future<_i3.Either<_i7.Failure, List<_i8.Series>>>);
@@ -152,11 +155,13 @@ class MockGetPopularSeries extends _i1.Mock implements _i10.GetPopularSeries {
         ),
       ) as _i2.SeriesRepository);
   @override
-  _i6.Future<_i3.Either<_i7.Failure, List<_i8.Series>>> execute() =>
+  _i6.Future<_i3.Either<_i7.Failure, List<_i8.Series>>> execute(
+          {int? page = 1}) =>
       (super.noSuchMethod(
         Invocation.method(
           #execute,
           [],
+          {#page: page},
         ),
         returnValue:
             _i6.Future<_i3.Either<_i7.Failure, List<_i8.Series>>>.value(
@@ -165,6 +170,7 @@ class MockGetPopularSeries extends _i1.Mock implements _i10.GetPopularSeries {
           Invocation.method(
             #execute,
             [],
+            {#page: page},
           ),
         )),
       ) as _i6.Future<_i3.Either<_i7.Failure, List<_i8.Series>>>);

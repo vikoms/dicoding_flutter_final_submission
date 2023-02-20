@@ -1,15 +1,13 @@
 import 'package:core/core.dart';
-import 'package:core/utils/state_enum.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 
 import '../bloc/now_playing_movie/now_playing_movie_bloc.dart';
 import '../bloc/popular_movie/popular_movie_bloc.dart';
 import '../bloc/top_rated_movie/top_rated_movie_bloc.dart';
-import '../providers/single_movie_list_notifier.dart';
 import '../route_arguments/movie_lis_arguments.dart';
+import '../widgets/bottom_loader.dart';
 import '../widgets/movie_card_list.dart';
 
 class MovieListPage extends StatefulWidget {
@@ -32,11 +30,12 @@ class _MovieListPageState extends State<MovieListPage> {
 
     _scrollController.addListener(_onScroll);
     Future.microtask(() {
-      if (widget.params.type == MovieListEnum.NowPlaying) {
+      final movieListType = widget.params.type;
+      if (movieListType == MovieListEnum.NowPlaying) {
         context.read<NowPlayingMovieBloc>().add(OnGetNowPlayingMovies());
-      } else if (widget.params.type == MovieListEnum.TopRated) {
+      } else if (movieListType == MovieListEnum.TopRated) {
         context.read<TopRatedMovieBloc>().add(OnGetTopRatedMovies());
-      } else if (widget.params.type == MovieListEnum.Popular) {
+      } else if (movieListType == MovieListEnum.Popular) {
         context.read<PopularMovieBloc>().add(OnGetPopularMovies());
       }
     });
@@ -49,16 +48,17 @@ class _MovieListPageState extends State<MovieListPage> {
         title: Text(widget.params.title),
       ),
       body: Padding(
-        padding: EdgeInsets.all(8.0),
-        child: _buildContent(widget.params),
+        padding: const EdgeInsets.all(8.0),
+        child: _buildContent(),
       ),
     );
   }
 
-  Widget _buildContent(MovieListArguments params) {
-    if (params.type == MovieListEnum.NowPlaying) {
+  Widget _buildContent() {
+    final movieListType = widget.params.type;
+    if (movieListType == MovieListEnum.NowPlaying) {
       return _buildNowPlayingMovie();
-    } else if (params.type == MovieListEnum.Popular) {
+    } else if (movieListType == MovieListEnum.Popular) {
       return _buildPopularMovie();
     } else {
       return _buildTopRatedMovie();
@@ -69,11 +69,11 @@ class _MovieListPageState extends State<MovieListPage> {
       _buildNowPlayingMovie() {
     return BlocBuilder<NowPlayingMovieBloc, NowPlayingMovieState>(
       builder: (context, state) {
-        if (state is NowPlayingMoviesLoading) {
+        if (state is NowPlayingMovieLoading) {
           return const Center(
             child: CircularProgressIndicator(),
           );
-        } else if (state is NowPlayingMoviesLoaded) {
+        } else if (state is NowPlayingMovieLoaded) {
           return ListView.builder(
             controller: _scrollController,
             itemBuilder: (context, index) {
@@ -87,7 +87,7 @@ class _MovieListPageState extends State<MovieListPage> {
                 ? state.movies.length
                 : state.movies.length + 1,
           );
-        } else if (state is NowPlayingMoviesError) {
+        } else if (state is NowPlayingMovieError) {
           return Center(
             child: Text(
               state.errorMessage,
@@ -195,9 +195,9 @@ class _MovieListPageState extends State<MovieListPage> {
   void _onScroll() {
     if (_isBottom) {
       if (widget.params.type == MovieListEnum.NowPlaying) {
-        context.read<NowPlayingMovieBloc>().add(OnGetMoreNowPlayingMovies());
+        context.read<NowPlayingMovieBloc>().add(OnGetNowPlayingMovies());
       } else if (widget.params.type == MovieListEnum.Popular) {
-        context.read<PopularMovieBloc>().add(OnGetMorePopularMovies());
+        context.read<PopularMovieBloc>().add(OnGetPopularMovies());
       }
     }
   }
@@ -215,25 +215,5 @@ class _MovieListPageState extends State<MovieListPage> {
       ..removeListener(_onScroll)
       ..dispose();
     super.dispose();
-  }
-}
-
-class BottomLoader extends StatelessWidget {
-  const BottomLoader({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.center,
-      child: const Center(
-        child: SizedBox(
-          width: 33,
-          height: 33,
-          child: CircularProgressIndicator(
-            strokeWidth: 1.5,
-          ),
-        ),
-      ),
-    );
   }
 }

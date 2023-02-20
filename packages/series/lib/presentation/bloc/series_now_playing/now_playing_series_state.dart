@@ -2,6 +2,8 @@ part of 'now_playing_series_bloc.dart';
 
 @immutable
 abstract class NowPlayingSeriesState extends Equatable {
+  const NowPlayingSeriesState();
+
   @override
   List<Object?> get props => [];
 }
@@ -11,43 +13,33 @@ class NowPlayingSeriesInitial extends NowPlayingSeriesState {}
 class NowPlayingSeriesLoading extends NowPlayingSeriesState {}
 
 class NowPlayingSeriesError extends NowPlayingSeriesState {
-  String errorMessage;
-  NowPlayingSeriesError(this.errorMessage);
+  final String errorMessage;
+
+  const NowPlayingSeriesError({required this.errorMessage});
+
   @override
   List<Object?> get props => [errorMessage];
 }
 
 class NowPlayingSeriesLoaded extends NowPlayingSeriesState {
-  final List<Series> nowPlayingSeries;
-  bool hasReachedMax;
-  RequestState pagingState;
-  String message;
-  NowPlayingSeriesLoaded({
-    required this.nowPlayingSeries,
+  final List<Series> series;
+  final bool hasReachedMax;
+
+  const NowPlayingSeriesLoaded({
+    required this.series,
     this.hasReachedMax = false,
-    this.pagingState = RequestState.Empty,
-    this.message = '',
   });
 
   NowPlayingSeriesLoaded copyWith({
-    List<Series>? newSeries,
-    bool hasReachedMax = false,
-    RequestState pagingState = RequestState.Empty,
-    String message = '',
+    List<Series>? series,
+    bool? hasReachedMax,
   }) {
     return NowPlayingSeriesLoaded(
-      nowPlayingSeries: newSeries ?? nowPlayingSeries,
-      hasReachedMax: hasReachedMax,
-      pagingState: pagingState,
-      message: message,
+      series: series ?? this.series,
+      hasReachedMax: hasReachedMax ?? this.hasReachedMax,
     );
   }
 
   @override
-  List<Object?> get props => [
-        nowPlayingSeries,
-        hasReachedMax,
-        pagingState,
-        message,
-      ];
+  List<Object?> get props => [series, hasReachedMax];
 }

@@ -14,6 +14,7 @@ import '../../../json_reader.dart';
 void main() {
   const API_KEY = 'api_key=b807fc0668b99af6a06ea5e34423da26';
   const BASE_URL = 'https://api.themoviedb.org/3';
+  final _page = 1;
 
   late SeriesRemoteDataSourceImpl dataSource;
   late MockHttpClient mockHttpClient;
@@ -31,7 +32,8 @@ void main() {
     test('should return list of Series Model when the response code is 200',
         () async {
       // arrange
-      when(mockHttpClient.get(Uri.parse("$BASE_URL/tv/on_the_air?$API_KEY")))
+      when(mockHttpClient
+              .get(Uri.parse("$BASE_URL/tv/on_the_air?$API_KEY&page=$_page")))
           .thenAnswer((_) async => http.Response(
               readJson('dummy_data/now_playing_series.json'), 200));
       // act
@@ -44,7 +46,8 @@ void main() {
         'should throw a ServerException when the response code is 404 or other',
         () async {
       // arrange
-      when(mockHttpClient.get(Uri.parse("$BASE_URL/tv/on_the_air?$API_KEY")))
+      when(mockHttpClient
+              .get(Uri.parse("$BASE_URL/tv/on_the_air?$API_KEY&page=$_page")))
           .thenAnswer((_) async => http.Response('Not Found', 404));
       // act
       final call = dataSource.getNowPlayingSeries();
@@ -61,7 +64,8 @@ void main() {
     test('should return list of series when response is success (200)',
         () async {
       // arrange
-      when(mockHttpClient.get(Uri.parse("$BASE_URL/tv/popular?$API_KEY")))
+      when(mockHttpClient
+              .get(Uri.parse("$BASE_URL/tv/popular?$API_KEY&page=$_page")))
           .thenAnswer((_) async =>
               http.Response(readJson('dummy_data/popular_series.json'), 200));
       // act
@@ -74,7 +78,8 @@ void main() {
         'should throw a ServerException when the response code is 404 or other',
         () async {
       // arrange
-      when(mockHttpClient.get(Uri.parse("$BASE_URL/tv/popular?$API_KEY")))
+      when(mockHttpClient
+              .get(Uri.parse("$BASE_URL/tv/popular?$API_KEY&page=$_page")))
           .thenAnswer((_) async => http.Response('Not Found', 404));
       // act
       final call = dataSource.getPopularSeries();

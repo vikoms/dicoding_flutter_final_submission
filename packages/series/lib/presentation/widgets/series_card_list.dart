@@ -35,6 +35,7 @@ class SeriesCard extends StatelessWidget {
           children: [
             Card(
               child: Container(
+                width: MediaQuery.of(context).size.width,
                 margin: const EdgeInsets.only(
                   left: 16 + 80 + 16,
                   bottom: 8,

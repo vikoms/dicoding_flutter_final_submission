@@ -64,11 +64,13 @@ class MockSeriesRepository extends _i1.Mock implements _i4.SeriesRepository {
   }
 
   @override
-  _i5.Future<_i2.Either<_i6.Failure, List<_i7.Series>>> getNowPlayingSeries() =>
+  _i5.Future<_i2.Either<_i6.Failure, List<_i7.Series>>> getNowPlayingSeries(
+          {int? page = 1}) =>
       (super.noSuchMethod(
         Invocation.method(
           #getNowPlayingSeries,
           [],
+          {#page: page},
         ),
         returnValue:
             _i5.Future<_i2.Either<_i6.Failure, List<_i7.Series>>>.value(
@@ -77,15 +79,18 @@ class MockSeriesRepository extends _i1.Mock implements _i4.SeriesRepository {
           Invocation.method(
             #getNowPlayingSeries,
             [],
+            {#page: page},
           ),
         )),
       ) as _i5.Future<_i2.Either<_i6.Failure, List<_i7.Series>>>);
   @override
-  _i5.Future<_i2.Either<_i6.Failure, List<_i7.Series>>> getPopularSeries() =>
+  _i5.Future<_i2.Either<_i6.Failure, List<_i7.Series>>> getPopularSeries(
+          {int? page = 1}) =>
       (super.noSuchMethod(
         Invocation.method(
           #getPopularSeries,
           [],
+          {#page: page},
         ),
         returnValue:
             _i5.Future<_i2.Either<_i6.Failure, List<_i7.Series>>>.value(
@@ -94,6 +99,7 @@ class MockSeriesRepository extends _i1.Mock implements _i4.SeriesRepository {
           Invocation.method(
             #getPopularSeries,
             [],
+            {#page: page},
           ),
         )),
       ) as _i5.Future<_i2.Either<_i6.Failure, List<_i7.Series>>>);
@@ -213,20 +219,23 @@ class MockSeriesRemoteDataSource extends _i1.Mock
   }
 
   @override
-  _i5.Future<List<_i10.SeriesModel>> getNowPlayingSeries() =>
+  _i5.Future<List<_i10.SeriesModel>> getNowPlayingSeries({int? page = 1}) =>
       (super.noSuchMethod(
         Invocation.method(
           #getNowPlayingSeries,
           [],
+          {#page: page},
         ),
         returnValue:
             _i5.Future<List<_i10.SeriesModel>>.value(<_i10.SeriesModel>[]),
       ) as _i5.Future<List<_i10.SeriesModel>>);
   @override
-  _i5.Future<List<_i10.SeriesModel>> getPopularSeries() => (super.noSuchMethod(
+  _i5.Future<List<_i10.SeriesModel>> getPopularSeries({int? page = 1}) =>
+      (super.noSuchMethod(
         Invocation.method(
           #getPopularSeries,
           [],
+          {#page: page},
         ),
         returnValue:
             _i5.Future<List<_i10.SeriesModel>>.value(<_i10.SeriesModel>[]),
@@ -305,15 +314,6 @@ class MockSeriesLocalDataSource extends _i1.Mock
         ),
         returnValue: _i5.Future<String>.value(''),
       ) as _i5.Future<String>);
-  @override
-  _i5.Future<List<_i12.WatchlistTable>> getWatchlist() => (super.noSuchMethod(
-        Invocation.method(
-          #getWatchlist,
-          [],
-        ),
-        returnValue: _i5.Future<List<_i12.WatchlistTable>>.value(
-            <_i12.WatchlistTable>[]),
-      ) as _i5.Future<List<_i12.WatchlistTable>>);
   @override
   _i5.Future<void> cacheNowPlayingSeries(List<_i13.SeriesTable>? series) =>
       (super.noSuchMethod(

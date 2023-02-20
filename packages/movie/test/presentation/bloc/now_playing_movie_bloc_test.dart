@@ -34,124 +34,118 @@ void main() {
   });
 
   final tMovieList = <Movie>[testMovie];
-
-  blocTest<NowPlayingMovieBloc, NowPlayingMovieState>(
-      'emits [Loading,Loaded] when data movies is gotten successfully',
-      build: () {
-        when(mockGetNowPlayingMovies.execute())
-            .thenAnswer((_) async => Right(tMovieList));
-        return nowPlayingMovieBloc;
-      },
-      act: (bloc) => bloc.add(OnGetNowPlayingMovies()),
-      expect: () => [
-            NowPlayingMoviesLoading(),
-            NowPlayingMoviesLoaded(movies: tMovieList),
-          ],
-      verify: (bloc) {
-        verify(mockGetNowPlayingMovies.execute());
-      });
-
-  blocTest<NowPlayingMovieBloc, NowPlayingMovieState>(
-      'emits [Loading,Error] when data movies is unsuccessfully',
-      build: () {
-        when(mockGetNowPlayingMovies.execute()).thenAnswer(
-          (_) async => Left(
-            ServerFailure('Server Failure'),
-          ),
-        );
-        return nowPlayingMovieBloc;
-      },
-      act: (bloc) => bloc.add(OnGetNowPlayingMovies()),
-      expect: () => [
-            NowPlayingMoviesLoading(),
-            NowPlayingMoviesError('Server Failure'),
-          ],
-      verify: (bloc) {
-        verify(mockGetNowPlayingMovies.execute());
-      });
-
-  group('OnGetmoreNowPlayingMovie', () {
+  group("When state is NowPlayingMovieInitial", () {
     blocTest<NowPlayingMovieBloc, NowPlayingMovieState>(
-      'emits nothing internet no connection',
-      build: () {
-        when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
-        return nowPlayingMovieBloc;
-      },
-      act: (bloc) => bloc.add(OnGetMoreNowPlayingMovies()),
-      expect: () => <NowPlayingMovieState>[],
-    );
-
-    blocTest<NowPlayingMovieBloc, NowPlayingMovieState>(
-      'emits nothing when state is loading',
-      build: () {
-        when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-        return nowPlayingMovieBloc;
-      },
-      seed: () =>
-          NowPlayingMoviesLoaded(movies: [], pagingState: RequestState.Loading),
-      act: (bloc) => bloc.add(OnGetMoreNowPlayingMovies()),
-      expect: () => <NowPlayingMovieState>[],
-    );
-
-    blocTest<NowPlayingMovieBloc, NowPlayingMovieState>(
-      'emits nothing when hasReachedMax is true',
-      build: () {
-        when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-        return nowPlayingMovieBloc;
-      },
-      seed: () => NowPlayingMoviesLoaded(movies: [], hasReachedMax: true),
-      act: (bloc) => bloc.add(OnGetMoreNowPlayingMovies()),
-      expect: () => <NowPlayingMovieState>[],
-    );
-    blocTest<NowPlayingMovieBloc, NowPlayingMovieState>(
-        'emits [Loading,Loaded] when data movies is fetching',
+        'emits [Loading,Loaded] when data movies is gotten successfully',
         build: () {
-          when(mockNetworkInfo.isConnected)
-              .thenAnswer((_) => Future.value(true));
-          when(mockGetNowPlayingMovies.execute(page: 1))
+          when(mockGetNowPlayingMovies.execute())
               .thenAnswer((_) async => Right(tMovieList));
+
+          when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+          nowPlayingMovieBloc.emit(NowPlayingMovieInitial());
           return nowPlayingMovieBloc;
         },
-        seed: () => NowPlayingMoviesLoaded(
-              movies: [],
-              hasReachedMax: false,
-              pagingState: RequestState.Empty,
-            ),
-        act: (bloc) => bloc.add(OnGetMoreNowPlayingMovies()),
-        wait: const Duration(milliseconds: 500),
+        act: (bloc) => bloc.add(OnGetNowPlayingMovies()),
         expect: () => [
-              NowPlayingMoviesLoaded(
-                movies: tMovieList,
-                hasReachedMax: false,
-                pagingState: RequestState.Loaded,
-              ),
+              NowPlayingMovieLoading(),
+              NowPlayingMovieLoaded(movies: tMovieList),
             ],
         verify: (bloc) {
-          verify(mockGetNowPlayingMovies.execute(page: 1));
+          verify(mockGetNowPlayingMovies.execute());
         });
 
     blocTest<NowPlayingMovieBloc, NowPlayingMovieState>(
-        'emits [Loading,Error] when data movies is gotten unsuccessfully',
+        'emits [Loading,Error] when data movies is unsuccessfully',
         build: () {
-          when(mockNetworkInfo.isConnected)
-              .thenAnswer((_) => Future.value(true));
-          when(mockGetNowPlayingMovies.execute(page: 1))
-              .thenAnswer((_) async => Left(ServerFailure('Server Error')));
+          when(mockGetNowPlayingMovies.execute()).thenAnswer(
+            (_) async => Left(
+              ServerFailure('Server Failure'),
+            ),
+          );
+
+          when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+          nowPlayingMovieBloc.emit(NowPlayingMovieInitial());
           return nowPlayingMovieBloc;
         },
-        seed: () => NowPlayingMoviesLoaded(
-              movies: [],
-              hasReachedMax: false,
-              pagingState: RequestState.Empty,
-            ),
-        act: (bloc) => bloc.add(OnGetMoreNowPlayingMovies()),
-        wait: const Duration(milliseconds: 500),
+        act: (bloc) => bloc.add(OnGetNowPlayingMovies()),
         expect: () => [
-              NowPlayingMoviesLoaded(
-                  pagingState: RequestState.Error, message: 'Server Error'),
+              NowPlayingMovieLoading(),
+              const NowPlayingMovieError(errorMessage: 'Server Failure'),
             ],
         verify: (bloc) {
-          verify(mockGetNowPlayingMovies.execute(page: 1));
+          verify(mockGetNowPlayingMovies.execute());
+        });
+  });
+
+  group("When state is NowPlayingMovieLoaded", () {
+    final _page = 2;
+    blocTest<NowPlayingMovieBloc, NowPlayingMovieState>(
+        'emits [Loaded] when pagination data movies is gotten successfully and has reached max = false, if exist more data',
+        build: () {
+          when(mockGetNowPlayingMovies.execute(page: _page))
+              .thenAnswer((_) async => Right(tMovieList));
+
+          when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+          nowPlayingMovieBloc.emit(NowPlayingMovieLoaded(
+            movies: tMovieList,
+          ));
+          return nowPlayingMovieBloc;
+        },
+        act: (bloc) => bloc.add(OnGetNowPlayingMovies()),
+        expect: () => [
+              NowPlayingMovieLoaded(
+                movies: tMovieList + tMovieList,
+                hasReachedMax: false,
+              ),
+            ],
+        verify: (bloc) {
+          verify(mockGetNowPlayingMovies.execute(page: _page));
+        });
+
+    blocTest<NowPlayingMovieBloc, NowPlayingMovieState>(
+        'emits [Loaded] when pagination data movies is gotten successfully and has reached max = true, if no more data exist',
+        build: () {
+          when(mockGetNowPlayingMovies.execute(page: _page))
+              .thenAnswer((_) async => Right([]));
+
+          when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+          nowPlayingMovieBloc.emit(NowPlayingMovieLoaded(
+            movies: tMovieList,
+          ));
+          return nowPlayingMovieBloc;
+        },
+        act: (bloc) => bloc.add(OnGetNowPlayingMovies()),
+        expect: () => [
+              NowPlayingMovieLoaded(
+                movies: tMovieList,
+                hasReachedMax: true,
+              ),
+            ],
+        verify: (bloc) {
+          verify(mockGetNowPlayingMovies.execute(page: _page));
+        });
+
+    blocTest<NowPlayingMovieBloc, NowPlayingMovieState>(
+        'emits [Error] when pagination data movies is unsuccessfully',
+        build: () {
+          when(mockGetNowPlayingMovies.execute(page: _page)).thenAnswer(
+            (_) async => Left(
+              ServerFailure('Server Failure'),
+            ),
+          );
+
+          when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+          nowPlayingMovieBloc.emit(NowPlayingMovieLoaded(
+            movies: [],
+          ));
+          return nowPlayingMovieBloc;
+        },
+        act: (bloc) => bloc.add(OnGetNowPlayingMovies()),
+        expect: () => [
+              const NowPlayingMovieError(errorMessage: 'Server Failure'),
+            ],
+        verify: (bloc) {
+          verify(mockGetNowPlayingMovies.execute(page: _page));
         });
   });
 }

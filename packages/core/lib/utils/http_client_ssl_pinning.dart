@@ -8,7 +8,8 @@ import 'package:http/http.dart' as http;
 import 'http_interceptor.dart';
 
 Future<SecurityContext> get globalContext async {
-  final sslCert = await rootBundle.load('certificates/tmdb_certificates.pem');
+  final sslCert =
+      await rootBundle.load('certificates/tmdb_certificates_new.pem');
   SecurityContext securityContext = SecurityContext(withTrustedRoots: false);
   securityContext.setTrustedCertificatesBytes(sslCert.buffer.asInt8List());
   return securityContext;

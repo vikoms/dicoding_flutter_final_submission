@@ -1,3 +1,4 @@
+import 'package:core/domain/entities/genre.dart';
 import 'package:core/utils/failure.dart';
 import 'package:dartz/dartz.dart';
 import '../entities/series.dart';
@@ -12,4 +13,6 @@ abstract class SeriesRepository {
   Future<Either<Failure, String>> saveWatchlist(SeriesDetail series);
   Future<Either<Failure, String>> removeWatchlist(SeriesDetail series);
   Future<Either<Failure, List<Series>>> getSeriesRecommendations(int id);
+  Future<Either<Failure, List<Series>>> getSeriesByGenre(int genreId, int page);
+  Future<Either<Failure, List<Genre>>> getSeriesGenres();
 }

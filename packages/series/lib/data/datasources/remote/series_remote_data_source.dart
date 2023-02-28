@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:core/core.dart';
+import 'package:core/data/models/genre_model.dart';
+import 'package:core/data/models/genre_response.dart';
 import 'package:http/http.dart' as http;
 
 import '../../models/series_detail_model.dart';
@@ -16,6 +18,8 @@ abstract class SeriesRemoteDataSource {
   Future<List<SeriesModel>> getTopRatedSeries();
   Future<List<SeriesModel>> searchSeries(String query);
   Future<List<SeriesModel>> getRecomendationSeries(int id);
+  Future<List<GenreModel>> getSeriesGenres();
+  Future<List<SeriesModel>> getSeriesByGenre(int genreId, int page);
 }
 
 class SeriesRemoteDataSourceImpl implements SeriesRemoteDataSource {
@@ -83,6 +87,28 @@ class SeriesRemoteDataSourceImpl implements SeriesRemoteDataSource {
         .get(Uri.parse("$BASE_URL/tv/$id/recommendations?$API_KEY"));
     if (response.statusCode == 200) {
       return SeriesResponse.fromJson(json.decode(response.body)).seriesList;
+    } else {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<List<SeriesModel>> getSeriesByGenre(int genreId, int page) async {
+    final response = await client.get(Uri.parse(
+        '$BASE_URL/discover/tv?$API_KEY&sort_by=popularity.desc&page=$page&with_genres=$genreId'));
+    if (response.statusCode == 200) {
+      return SeriesResponse.fromJson(json.decode(response.body)).seriesList;
+    } else {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<List<GenreModel>> getSeriesGenres() async {
+    final response = await client
+        .get(Uri.parse("$BASE_URL/genre/tv/list?$API_KEY&language=en"));
+    if (response.statusCode == 200) {
+      return GenreResponse.fromJson(json.decode(response.body)).genres;
     } else {
       throw ServerException();
     }

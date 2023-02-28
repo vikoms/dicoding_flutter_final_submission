@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:core/core.dart';
+import 'package:core/domain/entities/genre.dart';
 import 'package:dartz/dartz.dart';
 import 'package:watchlist/data/models/watchlist_table.dart';
 import '../../domain/entities/series.dart';
@@ -165,6 +166,35 @@ class SeriesRepositoryImpl implements SeriesRepository {
   Future<Either<Failure, List<Series>>> getSeriesRecommendations(int id) async {
     try {
       final result = await remoteDataSource.getRecomendationSeries(id);
+      return Right(result.map((e) => e.toEntity()).toList());
+    } on ServerException {
+      return Left(ServerFailure(""));
+    } on SocketException {
+      return Left(
+        ConnectionFailure("Failed to connect to the network"),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Series>>> getSeriesByGenre(
+      int genreId, int page) async {
+    try {
+      final result = await remoteDataSource.getSeriesByGenre(genreId, page);
+      return Right(result.map((e) => e.toEntity()).toList());
+    } on ServerException {
+      return Left(ServerFailure(""));
+    } on SocketException {
+      return Left(
+        ConnectionFailure("Failed to connect to the network"),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Genre>>> getSeriesGenres() async {
+    try {
+      final result = await remoteDataSource.getSeriesGenres();
       return Right(result.map((e) => e.toEntity()).toList());
     } on ServerException {
       return Left(ServerFailure(""));

@@ -7,7 +7,6 @@ import 'package:core/core.dart';
 import 'package:movie/presentation/pages/movie_detail_page.dart';
 import 'package:movie/presentation/widgets/carousel_movie_item.dart';
 import 'package:movie/presentation/widgets/movie_card_home.dart';
-import '../../domain/entities/movie_detail.dart';
 import '../route_arguments/movie_lis_arguments.dart';
 import 'movie_list_page.dart';
 
@@ -184,7 +183,7 @@ class _HomeMoviePageState extends State<HomeMoviePage> {
                     autoPlay: true,
                     aspectRatio: 2.0,
                     enlargeCenterPage: true,
-                    height: 290,
+                    height: 310,
                   ),
                 ),
               );

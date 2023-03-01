@@ -67,6 +67,6 @@ class PopularSeriesBloc extends Bloc<PopularSeriesEvent, PopularSeriesState> {
           );
         }
       }
-    });
+    }, transformer: Utils.debounce(const Duration(milliseconds: 500)));
   }
 }

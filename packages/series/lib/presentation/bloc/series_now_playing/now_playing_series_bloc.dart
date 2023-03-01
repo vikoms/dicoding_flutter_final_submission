@@ -65,6 +65,6 @@ class NowPlayingSeriesBloc
           );
         }
       }
-    });
+    }, transformer: Utils.debounce(const Duration(milliseconds: 500)));
   }
 }

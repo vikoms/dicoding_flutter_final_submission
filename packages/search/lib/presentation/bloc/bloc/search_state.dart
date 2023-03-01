@@ -59,8 +59,28 @@ class SearchHasDataMovies extends SearchState {
 
 class SearchHasDataSeries extends SearchState {
   final List<Series> result;
+  final int? selectedGenreId;
+  final bool hasReachedMax;
+  final String query;
+  SearchHasDataSeries({
+    required this.result,
+    this.selectedGenreId,
+    this.query = "",
+    this.hasReachedMax = false,
+  });
 
-  SearchHasDataSeries(this.result);
+  SearchHasDataSeries copyWith({
+    int? selectedGenreId,
+    String? query,
+    bool? hasReachedMax,
+  }) {
+    return SearchHasDataSeries(
+      result: result,
+      query: query ?? this.query,
+      selectedGenreId: selectedGenreId ?? this.selectedGenreId,
+      hasReachedMax: hasReachedMax ?? this.hasReachedMax,
+    );
+  }
 
   @override
   List<Object> get props => [result];

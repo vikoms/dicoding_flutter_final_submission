@@ -16,7 +16,7 @@ abstract class SeriesRemoteDataSource {
   Future<List<SeriesModel>> getPopularSeries({int page = 1});
   Future<SeriesDetailResponse> getDetailSeries(int id);
   Future<List<SeriesModel>> getTopRatedSeries();
-  Future<List<SeriesModel>> searchSeries(String query);
+  Future<List<SeriesModel>> searchSeries(String query, int page);
   Future<List<SeriesModel>> getRecomendationSeries(int id);
   Future<List<GenreModel>> getSeriesGenres();
   Future<List<SeriesModel>> getSeriesByGenre(int genreId, int page);
@@ -71,9 +71,12 @@ class SeriesRemoteDataSourceImpl implements SeriesRemoteDataSource {
   }
 
   @override
-  Future<List<SeriesModel>> searchSeries(String query) async {
+  Future<List<SeriesModel>> searchSeries(
+    String query,
+    int page,
+  ) async {
     final response = await client
-        .get(Uri.parse('$BASE_URL/search/tv?$API_KEY&query=$query'));
+        .get(Uri.parse('$BASE_URL/search/tv?$API_KEY&query=$query&page=$page'));
     if (response.statusCode == 200) {
       return SeriesResponse.fromJson(json.decode(response.body)).seriesList;
     } else {

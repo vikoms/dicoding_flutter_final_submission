@@ -55,6 +55,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
     on<OnQueryChangeMovies>((event, emit) async {
       final query = event.query;
+
       _page = 1;
       _hasNextPage = true;
       emit(SearchLoading());
@@ -68,19 +69,21 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           query: event.query,
         ));
       });
-    }, transformer: debounce(const Duration(milliseconds: 500)));
+    }, transformer: Utils.debounce(const Duration(milliseconds: 500)));
 
     on<OnQueryChangeSeries>((event, emit) async {
       final query = event.query;
 
       emit(SearchLoading());
-      final result = await _searchSeries.execute(query);
+      final result = await _searchSeries.execute(query, _page);
       result.fold((failure) {
         emit(SearchError(failure.message));
       }, (data) {
-        emit(SearchHasDataSeries(data));
+        emit(SearchHasDataSeries(
+          result: data,
+        ));
       });
-    }, transformer: debounce(const Duration(milliseconds: 500)));
+    }, transformer: Utils.debounce(const Duration(milliseconds: 500)));
 
     on<OnGetMoviesByGenre>((event, emit) async {
       final moviesFiltered = await _getMoviesByGenre.execute(event.genreId, 1);
@@ -96,6 +99,26 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           _page++;
           emit(SearchHasDataMovies(
             result: movies,
+            selectedGenreId: event.genreId,
+          ));
+        }
+      });
+    });
+
+    on<OnGetSeriesByGenre>((event, emit) async {
+      final seriesFiltered = await _getSeriesByGenre.execute(event.genreId, 1);
+      seriesFiltered.fold((error) {
+        emit(SearchError(error.message));
+      }, (series) {
+        if (series.isEmpty) {
+          _hasNextPage = false;
+          emit((state as SearchHasDataSeries).copyWith(
+            hasReachedMax: true,
+          ));
+        } else {
+          _page++;
+          emit(SearchHasDataSeries(
+            result: series,
             selectedGenreId: event.genreId,
           ));
         }
@@ -135,21 +158,41 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           );
         }
       });
-    });
+    }, transformer: Utils.debounce(const Duration(milliseconds: 500)));
 
-    on<OnGetSeriesByGenre>((event, emit) async {
-      final genreId = event.genreId;
-      emit(SearchLoading());
-      final result = await _getSeriesByGenre.execute(event.genreId, 1);
-      result.fold((error) {
-        emit(SearchError(error.message));
-      }, (series) {
-        emit(SearchHasDataSeries(series));
+    on<OnGetMoreSeries>((event, emit) async {
+      bool isConnected = await _networkInfo.isConnected;
+      if (!_hasNextPage && !isConnected) {
+        return;
+      }
+
+      final query = (state as SearchHasDataSeries).query;
+      final selectedGenreId = (state as SearchHasDataSeries).selectedGenreId;
+      Either<Failure, List<Series>> result;
+      if (query.isEmpty) {
+        result = await _getSeriesByGenre.execute(selectedGenreId!, _page);
+      } else {
+        result = await _searchSeries.execute(query, _page);
+      }
+
+      result.fold((l) {}, (series) {
+        if (series.isEmpty) {
+          _hasNextPage = false;
+          emit((state as SearchHasDataSeries).copyWith(
+            hasReachedMax: true,
+          ));
+        } else {
+          _page++;
+          emit(
+            SearchHasDataSeries(
+              result: (state as SearchHasDataSeries).result + series,
+              hasReachedMax: false,
+              selectedGenreId: selectedGenreId,
+              query: query,
+            ),
+          );
+        }
       });
-    });
-  }
-
-  EventTransformer<T> debounce<T>(Duration duration) {
-    return (events, mapper) => events.debounceTime(duration).flatMap(mapper);
+    }, transformer: Utils.debounce(const Duration(milliseconds: 500)));
   }
 }

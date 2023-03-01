@@ -48,7 +48,8 @@ class _SearchPageState extends State<SearchPage> {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: TextField(
-                onChanged: (query) {
+                onChanged: (query) {},
+                onSubmitted: (query) {
                   if (query.isEmpty) {
                     searchBloc.add(OnGetGenres(widget.type));
                   } else {
@@ -80,26 +81,30 @@ class _SearchPageState extends State<SearchPage> {
                     );
                   case GenreHasData:
                     final genres = (state as GenreHasData).result;
-                    return Wrap(
-                      spacing: 10,
-                      children: genres.map((genre) {
-                        return InkWell(
-                          onTap: () {
-                            if (widget.type == SEARCH_MOVIES) {
-                              searchBloc.add(OnGetMoviesByGenre(
-                                genre.id,
-                              ));
-                            } else {
-                              searchBloc.add(OnGetSeriesByGenre(genre.id));
-                            }
-                          },
-                          child: Chip(
-                            label: Text(
-                              genre.name,
-                            ),
-                          ),
-                        );
-                      }).toList(),
+                    return Expanded(
+                      child: SingleChildScrollView(
+                        child: Wrap(
+                          spacing: 10,
+                          children: genres.map((genre) {
+                            return InkWell(
+                              onTap: () {
+                                if (widget.type == SEARCH_MOVIES) {
+                                  searchBloc.add(OnGetMoviesByGenre(
+                                    genre.id,
+                                  ));
+                                } else {
+                                  searchBloc.add(OnGetSeriesByGenre(genre.id));
+                                }
+                              },
+                              child: Chip(
+                                label: Text(
+                                  genre.name,
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
                     );
                   case SearchHasDataMovies:
                     final result = (state as SearchHasDataMovies).result;
@@ -124,12 +129,18 @@ class _SearchPageState extends State<SearchPage> {
 
                     return Expanded(
                       child: ListView.builder(
+                        controller: _scrollController,
                         padding: const EdgeInsets.all(8),
                         itemBuilder: (context, index) {
+                          if (index >= state.result.length) {
+                            return const BottomLoader();
+                          }
                           final series = result[index];
                           return SeriesCard(series);
                         },
-                        itemCount: result.length,
+                        itemCount: state.hasReachedMax
+                            ? state.result.length
+                            : state.result.length + 1,
                       ),
                     );
                   case SearchError:
@@ -165,6 +176,8 @@ class _SearchPageState extends State<SearchPage> {
     if (_isBottom) {
       if (widget.type == SEARCH_MOVIES) {
         context.read<SearchBloc>().add(OnGetMoreMovies());
+      } else if (widget.type == SEARCH_SERIES) {
+        context.read<SearchBloc>().add(OnGetMoreSeries());
       }
     }
   }

@@ -64,6 +64,6 @@ class PopularMovieBloc extends Bloc<PopularMovieEvent, PopularMovieState> {
           );
         }
       }
-    });
+    }, transformer: Utils.debounce(const Duration(milliseconds: 500)));
   }
 }

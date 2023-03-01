@@ -149,9 +149,10 @@ class SeriesRepositoryImpl implements SeriesRepository {
   }
 
   @override
-  Future<Either<Failure, List<Series>>> searchSeries(String query) async {
+  Future<Either<Failure, List<Series>>> searchSeries(
+      String query, int page) async {
     try {
-      final result = await remoteDataSource.searchSeries(query);
+      final result = await remoteDataSource.searchSeries(query, page);
       return Right(result.map((e) => e.toEntity()).toList());
     } on ServerException {
       return Left(ServerFailure(""));

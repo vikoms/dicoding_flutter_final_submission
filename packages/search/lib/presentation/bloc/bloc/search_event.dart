@@ -50,3 +50,10 @@ class OnGetMoreMovies extends SearchEvent {
   @override
   List<Object> get props => [];
 }
+
+class OnGetMoreSeries extends SearchEvent {
+  const OnGetMoreSeries();
+
+  @override
+  List<Object> get props => [];
+}

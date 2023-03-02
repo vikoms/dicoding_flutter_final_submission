@@ -180,8 +180,10 @@ class MovieRepositoryImpl implements MovieRepository {
     try {
       final result = await remoteDataSource.getMoviesByGenre(genreId, page);
       return Right(result.map((e) => e.toEntity()).toList());
-    } on DatabaseException catch (e) {
-      return Left(DatabaseFailure(e.message));
+    } on ServerException {
+      return Left(ServerFailure(''));
+    } on SocketException {
+      return Left(ConnectionFailure('Failed to connect to the network'));
     }
   }
 
@@ -190,8 +192,10 @@ class MovieRepositoryImpl implements MovieRepository {
     try {
       final result = await remoteDataSource.getMovieGenres();
       return Right(result.map((e) => e.toEntity()).toList());
-    } on DatabaseException catch (e) {
-      return Left(DatabaseFailure(e.message));
+    } on ServerException {
+      return Left(ServerFailure(''));
+    } on SocketException {
+      return Left(ConnectionFailure('Failed to connect to the network'));
     }
   }
 }

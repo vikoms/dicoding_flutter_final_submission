@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:core/data/models/genre_response.dart';
 import 'package:core/utils/exception.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
@@ -186,12 +187,12 @@ void main() {
 
     test('should return list of movies when response code is 200', () async {
       // arrange
-      when(mockHttpClient
-              .get(Uri.parse('$BASE_URL/search/movie?$API_KEY&query=$tQuery')))
+      when(mockHttpClient.get(Uri.parse(
+              '$BASE_URL/search/movie?$API_KEY&query=$tQuery&page=$_page')))
           .thenAnswer((_) async => http.Response(
               readJson('dummy_data/search_spiderman_movie.json'), 200));
       // act
-      final result = await dataSource.searchMovies(tQuery);
+      final result = await dataSource.searchMovies(tQuery, _page);
       // assert
       expect(result, tSearchResult);
     });
@@ -199,12 +200,73 @@ void main() {
     test('should throw ServerException when response code is other than 200',
         () async {
       // arrange
-      when(mockHttpClient
-              .get(Uri.parse('$BASE_URL/search/movie?$API_KEY&query=$tQuery')))
+      when(mockHttpClient.get(Uri.parse(
+              '$BASE_URL/search/movie?$API_KEY&query=$tQuery&page=$_page')))
           .thenAnswer((_) async => http.Response('Not Found', 404));
       // act
-      final call = dataSource.searchMovies(tQuery);
+      final call = dataSource.searchMovies(tQuery, _page);
       // assert
+      expect(() => call, throwsA(isA<ServerException>()));
+    });
+  });
+
+  group('Get Genre Movie', () {
+    final tGenreResult = GenreResponse.fromJson(
+            json.decode(readJson('dummy_data/genre_movie.json')))
+        .genres;
+
+    test('should return list of genre when response code is 200', () async {
+      // arrange
+      when(mockHttpClient.get(
+              Uri.parse("$BASE_URL/genre/movie/list?$API_KEY&language=en")))
+          .thenAnswer((_) async =>
+              http.Response(readJson('dummy_data/genre_movie.json'), 200));
+      // act
+      final result = await dataSource.getMovieGenres();
+      // assert
+      expect(result, tGenreResult);
+    });
+
+    test('should throw ServerException when response code is other than 200',
+        () async {
+      // arrange
+      when(mockHttpClient.get(
+              Uri.parse("$BASE_URL/genre/movie/list?$API_KEY&language=en")))
+          .thenAnswer((_) async => http.Response('Not Found', 404));
+      // act
+      final call = dataSource.getMovieGenres();
+      // assert
+      expect(() => call, throwsA(isA<ServerException>()));
+    });
+  });
+
+  group('Get Movies By Genre', () {
+    final tMovieResult = MovieResponse.fromJson(
+            json.decode(readJson('dummy_data/now_playing.json')))
+        .movieList;
+    final tGenreId = 1;
+
+    test('should return list of movies when response code is 200', () async {
+      //arrange
+      when(mockHttpClient.get(Uri.parse(
+              '$BASE_URL/discover/movie?$API_KEY&sort_by=popularity.desc&page=$_page&with_genres=$tGenreId')))
+          .thenAnswer((_) async =>
+              http.Response(readJson('dummy_data/now_playing.json'), 200));
+
+      // act
+      final result = await dataSource.getMoviesByGenre(tGenreId, _page);
+      expect(result, tMovieResult);
+    });
+
+    test('should throw ServerException when response code is other than 200',
+        () async {
+      //arrange
+      when(mockHttpClient.get(Uri.parse(
+              '$BASE_URL/discover/movie?$API_KEY&sort_by=popularity.desc&page=$_page&with_genres=$tGenreId')))
+          .thenAnswer((_) async => http.Response('Not Found', 404));
+
+      // act
+      final call = dataSource.getMoviesByGenre(tGenreId, _page);
       expect(() => call, throwsA(isA<ServerException>()));
     });
   });

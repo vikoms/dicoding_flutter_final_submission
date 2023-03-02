@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:core/data/models/genre_model.dart';
+import 'package:core/domain/entities/genre.dart';
 import 'package:core/utils/exception.dart';
 import 'package:core/utils/failure.dart';
 import 'package:dartz/dartz.dart';
@@ -63,8 +64,13 @@ void main() {
     voteCount: 124,
   );
 
+  final tGenreModel = GenreModel(id: 1, name: "name");
+  final tGenre = Genre(id: 1, name: "name");
+
   final tSeriesModelList = <SeriesModel>[tSeriesModel];
   final tSeriesList = <Series>[tSeries];
+  final tGenreModelList = <GenreModel>[tGenreModel];
+  final tGenreList = <Genre>[tGenre];
 
   group('Now Playing Series', () {
     test('should check if the device is online', () async {
@@ -613,10 +619,10 @@ void main() {
     test('should return Series list when call to data source is successful',
         () async {
       // arrange
-      when(mockRemoteDataSource.searchSeries(tQuery))
+      when(mockRemoteDataSource.searchSeries(query: tQuery))
           .thenAnswer((_) async => tSeriesModelList);
       // act
-      final result = await repository.searchSeries(tQuery);
+      final result = await repository.searchSeries(query: tQuery);
       // assert
       /* workaround to test List in Right. Issue: https://github.com/spebbe/dartz/issues/80 */
       final resultList = result.getOrElse(() => []);
@@ -626,10 +632,10 @@ void main() {
     test('should return ServerFailure when call to data source is unsuccessful',
         () async {
       // arrange
-      when(mockRemoteDataSource.searchSeries(tQuery))
+      when(mockRemoteDataSource.searchSeries(query: tQuery))
           .thenThrow(ServerException());
       // act
-      final result = await repository.searchSeries(tQuery);
+      final result = await repository.searchSeries(query: tQuery);
       // assert
       expect(result, Left(ServerFailure('')));
     });
@@ -638,10 +644,104 @@ void main() {
         'should return ConnectionFailure when device is not connected to the internet',
         () async {
       // arrange
-      when(mockRemoteDataSource.searchSeries(tQuery))
+      when(mockRemoteDataSource.searchSeries(query: tQuery))
           .thenThrow(SocketException('Failed to connect to the network'));
       // act
-      final result = await repository.searchSeries(tQuery);
+      final result = await repository.searchSeries(query: tQuery);
+      // assert
+      expect(
+          result, Left(ConnectionFailure('Failed to connect to the network')));
+    });
+  });
+
+  group('Get Series Genres', () {
+    test('should return genre list when call to data source is successful',
+        () async {
+      // arrange
+      when(mockRemoteDataSource.getSeriesGenres())
+          .thenAnswer((_) async => tGenreModelList);
+      // act
+      final result = await repository.getSeriesGenres();
+      // assert
+      /* workaround to test List in Right. Issue: https://github.com/spebbe/dartz/issues/80 */
+      final resultList = result.getOrElse(() => []);
+      expect(resultList, tGenreList);
+    });
+
+    test('should return ServerFailure when call to data source is unsuccessful',
+        () async {
+      // arrange
+      when(mockRemoteDataSource.getSeriesGenres()).thenThrow(ServerException());
+      // act
+      final result = await repository.getSeriesGenres();
+      // assert
+      expect(result, Left(ServerFailure('')));
+    });
+
+    test(
+        'should return ConnectionFailure when device is not connected to the internet',
+        () async {
+      // arrange
+      when(mockRemoteDataSource.getSeriesGenres())
+          .thenThrow(SocketException('Failed to connect to the network'));
+      // act
+      final result = await repository.getSeriesGenres();
+      // assert
+      expect(
+          result, Left(ConnectionFailure('Failed to connect to the network')));
+    });
+  });
+
+  group('Get Series By Genre', () {
+    final tGenreId = 28;
+    final _page = 1;
+    test('should return movies when call to data source is successful',
+        () async {
+      // arrange
+      when(mockRemoteDataSource.getSeriesByGenre(
+        genreId: tGenreId,
+        page: _page,
+      )).thenAnswer((_) async => tSeriesModelList);
+      // act
+      final result = await repository.getSeriesByGenre(
+        genreId: tGenreId,
+        page: _page,
+      );
+      // assert
+      /* workaround to test List in Right. Issue: https://github.com/spebbe/dartz/issues/80 */
+      final resultList = result.getOrElse(() => []);
+      expect(resultList, tSeriesList);
+    });
+
+    test('should return ServerFailure when call to data source is unsuccessful',
+        () async {
+      // arrange
+      when(mockRemoteDataSource.getSeriesByGenre(
+        genreId: tGenreId,
+        page: _page,
+      )).thenThrow(ServerException());
+      // act
+      final result = await repository.getSeriesByGenre(
+        genreId: tGenreId,
+        page: _page,
+      );
+      // assert
+      expect(result, Left(ServerFailure('')));
+    });
+
+    test(
+        'should return ConnectionFailure when device is not connected to the internet',
+        () async {
+      // arrange
+      when(mockRemoteDataSource.getSeriesByGenre(
+        genreId: tGenreId,
+        page: _page,
+      )).thenThrow(SocketException('Failed to connect to the network'));
+      // act
+      final result = await repository.getSeriesByGenre(
+        genreId: tGenreId,
+        page: _page,
+      );
       // assert
       expect(
           result, Left(ConnectionFailure('Failed to connect to the network')));

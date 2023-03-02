@@ -9,6 +9,9 @@ class SearchSeries {
   SearchSeries(this.repository);
 
   Future<Either<Failure, List<Series>>> execute(String query, int page) {
-    return repository.searchSeries(query, page);
+    return repository.searchSeries(
+      query: query,
+      page: page,
+    );
   }
 }

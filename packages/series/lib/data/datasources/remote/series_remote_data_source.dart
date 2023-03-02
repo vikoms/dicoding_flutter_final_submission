@@ -16,10 +16,16 @@ abstract class SeriesRemoteDataSource {
   Future<List<SeriesModel>> getPopularSeries({int page = 1});
   Future<SeriesDetailResponse> getDetailSeries(int id);
   Future<List<SeriesModel>> getTopRatedSeries();
-  Future<List<SeriesModel>> searchSeries(String query, int page);
+  Future<List<SeriesModel>> searchSeries({
+    required String query,
+    int page = 1,
+  });
   Future<List<SeriesModel>> getRecomendationSeries(int id);
   Future<List<GenreModel>> getSeriesGenres();
-  Future<List<SeriesModel>> getSeriesByGenre(int genreId, int page);
+  Future<List<SeriesModel>> getSeriesByGenre({
+    required int genreId,
+    int page = 1,
+  });
 }
 
 class SeriesRemoteDataSourceImpl implements SeriesRemoteDataSource {
@@ -72,9 +78,7 @@ class SeriesRemoteDataSourceImpl implements SeriesRemoteDataSource {
 
   @override
   Future<List<SeriesModel>> searchSeries(
-    String query,
-    int page,
-  ) async {
+      {required String query, int page = 1}) async {
     final response = await client
         .get(Uri.parse('$BASE_URL/search/tv?$API_KEY&query=$query&page=$page'));
     if (response.statusCode == 200) {
@@ -96,7 +100,10 @@ class SeriesRemoteDataSourceImpl implements SeriesRemoteDataSource {
   }
 
   @override
-  Future<List<SeriesModel>> getSeriesByGenre(int genreId, int page) async {
+  Future<List<SeriesModel>> getSeriesByGenre({
+    required int genreId,
+    int page = 1,
+  }) async {
     final response = await client.get(Uri.parse(
         '$BASE_URL/discover/tv?$API_KEY&sort_by=popularity.desc&page=$page&with_genres=$genreId'));
     if (response.statusCode == 200) {

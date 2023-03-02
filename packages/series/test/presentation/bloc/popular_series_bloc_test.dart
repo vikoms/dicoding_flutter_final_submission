@@ -41,6 +41,7 @@ void main() {
           popularSeriesBloc.emit(PopularSeriesInitial());
           return popularSeriesBloc;
         },
+        wait: const Duration(milliseconds: 500),
         act: (bloc) => bloc.add(OnGetPopularSeries()),
         expect: () => [
               PopularSeriesLoading(),
@@ -63,6 +64,7 @@ void main() {
           popularSeriesBloc.emit(PopularSeriesInitial());
           return popularSeriesBloc;
         },
+        wait: const Duration(milliseconds: 500),
         act: (bloc) => bloc.add(OnGetPopularSeries()),
         expect: () => [
               PopularSeriesLoading(),
@@ -87,6 +89,7 @@ void main() {
           ));
           return popularSeriesBloc;
         },
+        wait: const Duration(milliseconds: 500),
         act: (bloc) => bloc.add(OnGetPopularSeries()),
         expect: () => [
               PopularSeriesLoaded(
@@ -110,6 +113,7 @@ void main() {
           ));
           return popularSeriesBloc;
         },
+        wait: const Duration(milliseconds: 500),
         act: (bloc) => bloc.add(OnGetPopularSeries()),
         expect: () => [
               PopularSeriesLoaded(
@@ -136,6 +140,7 @@ void main() {
           ));
           return popularSeriesBloc;
         },
+        wait: const Duration(milliseconds: 500),
         act: (bloc) => bloc.add(OnGetPopularSeries()),
         expect: () => [
               const PopularSeriesError(errorMessage: 'Server Failure'),

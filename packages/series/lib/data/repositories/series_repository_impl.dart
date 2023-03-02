@@ -149,10 +149,15 @@ class SeriesRepositoryImpl implements SeriesRepository {
   }
 
   @override
-  Future<Either<Failure, List<Series>>> searchSeries(
-      String query, int page) async {
+  Future<Either<Failure, List<Series>>> searchSeries({
+    required String query,
+    int page = 1,
+  }) async {
     try {
-      final result = await remoteDataSource.searchSeries(query, page);
+      final result = await remoteDataSource.searchSeries(
+        query: query,
+        page: page,
+      );
       return Right(result.map((e) => e.toEntity()).toList());
     } on ServerException {
       return Left(ServerFailure(""));
@@ -178,10 +183,15 @@ class SeriesRepositoryImpl implements SeriesRepository {
   }
 
   @override
-  Future<Either<Failure, List<Series>>> getSeriesByGenre(
-      int genreId, int page) async {
+  Future<Either<Failure, List<Series>>> getSeriesByGenre({
+    required int genreId,
+    int page = 1,
+  }) async {
     try {
-      final result = await remoteDataSource.getSeriesByGenre(genreId, page);
+      final result = await remoteDataSource.getSeriesByGenre(
+        genreId: genreId,
+        page: page,
+      );
       return Right(result.map((e) => e.toEntity()).toList());
     } on ServerException {
       return Left(ServerFailure(""));

@@ -11,7 +11,9 @@ import 'package:movie/data/datasources/remote/movie_remote_data_source.dart';
 import 'package:movie/data/repositories/movie_repository_impl.dart';
 import 'package:movie/domain/repositories/movie_repository.dart';
 import 'package:movie/domain/usecases/get_movie_detail.dart';
+import 'package:movie/domain/usecases/get_movie_genres.dart';
 import 'package:movie/domain/usecases/get_movie_recommendations.dart';
+import 'package:movie/domain/usecases/get_movies_by_genre.dart';
 import 'package:movie/domain/usecases/get_now_playing_movies.dart';
 import 'package:movie/domain/usecases/get_popular_movies.dart';
 import 'package:movie/domain/usecases/get_top_rated_movies.dart';
@@ -22,12 +24,6 @@ import 'package:movie/presentation/bloc/movie_detail/movie_detail_bloc.dart';
 import 'package:movie/presentation/bloc/now_playing_movie/now_playing_movie_bloc.dart';
 import 'package:movie/presentation/bloc/popular_movie/popular_movie_bloc.dart';
 import 'package:movie/presentation/bloc/top_rated_movie/top_rated_movie_bloc.dart';
-import 'package:movie/presentation/providers/movie_detail_notifier.dart';
-import 'package:movie/presentation/providers/movie_list_notifier.dart';
-import 'package:movie/presentation/providers/popular_movies_notifier.dart';
-import 'package:movie/presentation/providers/single_movie_list_notifier.dart';
-import 'package:movie/presentation/providers/top_rated_movies_notifier.dart';
-import 'package:movie/presentation/providers/watchlist_movie_notifier.dart';
 import 'package:search/presentation/bloc/bloc/search_bloc.dart';
 import 'package:search/search.dart';
 import 'package:series/data/datasources/local/series_local_data_source.dart';
@@ -39,15 +35,14 @@ import 'package:series/domain/usecases/get_popular_series.dart';
 import 'package:series/domain/usecases/get_series_detail.dart';
 import 'package:series/domain/usecases/get_series_recommendations.dart';
 import 'package:series/domain/usecases/get_top_rated_series.dart';
+import 'package:series/domain/usecases/get_series_by_genre.dart';
+import 'package:series/domain/usecases/get_series_genres.dart';
 import 'package:series/domain/usecases/remove_watchlist_series.dart';
 import 'package:series/domain/usecases/save_watchlist_series.dart';
 import 'package:series/presentation/bloc/series_home/series_home_bloc.dart';
 import 'package:series/presentation/bloc/series_now_playing/now_playing_series_bloc.dart';
 import 'package:series/presentation/bloc/series_popular/popular_series_bloc.dart';
 import 'package:series/presentation/bloc/series_top_rated/top_rated_series_bloc.dart';
-import 'package:series/presentation/providers/series_detail_notifier.dart';
-import 'package:series/presentation/providers/series_list_notifier.dart';
-import 'package:series/presentation/providers/single_series_list_notifier.dart';
 import 'package:series/presentation/bloc/series_detail/series_detail_bloc.dart';
 import 'package:trailer/data/datasource/trailer_remote_data_source.dart';
 import 'package:trailer/data/repositories/trailer_repository_impl.dart';
@@ -137,6 +132,11 @@ void init() {
 // BLOC
   locator.registerFactory(
     () => SearchBloc(
+      locator(),
+      locator(),
+      locator(),
+      locator(),
+      locator(),
       locator(),
       locator(),
     ),
@@ -247,6 +247,10 @@ void init() {
   locator.registerLazySingleton(() => GetWatchlistStatus(locator()));
   locator.registerLazySingleton(() => GetTrailer(locator()));
 
+  locator.registerLazySingleton(() => GetMoviesByGenre(locator()));
+  locator.registerLazySingleton(() => GetMovieGenres(locator()));
+  locator.registerLazySingleton(() => GetSeriesGenres(locator()));
+  locator.registerLazySingleton(() => GetSeriesByGenre(locator()));
   // repository
   locator.registerLazySingleton<MovieRepository>(
     () => MovieRepositoryImpl(

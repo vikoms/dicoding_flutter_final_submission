@@ -5,15 +5,21 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i6;
 
+import 'package:core/core.dart' as _i11;
+import 'package:core/domain/entities/genre.dart' as _i13;
 import 'package:core/utils/failure.dart' as _i7;
 import 'package:dartz/dartz.dart' as _i3;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:movie/domain/entities/movie.dart' as _i8;
 import 'package:movie/domain/repositories/movie_repository.dart' as _i2;
+import 'package:movie/domain/usecases/get_movie_genres.dart' as _i12;
+import 'package:movie/domain/usecases/get_movies_by_genre.dart' as _i15;
 import 'package:search/domain/usecases/search_movies.dart' as _i5;
 import 'package:search/domain/usecases/search_series.dart' as _i9;
 import 'package:series/domain/entities/series.dart' as _i10;
 import 'package:series/domain/repositories/series_repository.dart' as _i4;
+import 'package:series/domain/usecases/get_series_by_genre.dart' as _i16;
+import 'package:series/domain/usecases/get_series_genres.dart' as _i14;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -75,18 +81,27 @@ class MockSearchMovies extends _i1.Mock implements _i5.SearchMovies {
         ),
       ) as _i2.MovieRepository);
   @override
-  _i6.Future<_i3.Either<_i7.Failure, List<_i8.Movie>>> execute(String? query) =>
+  _i6.Future<_i3.Either<_i7.Failure, List<_i8.Movie>>> execute(
+    String? query,
+    int? page,
+  ) =>
       (super.noSuchMethod(
         Invocation.method(
           #execute,
-          [query],
+          [
+            query,
+            page,
+          ],
         ),
         returnValue: _i6.Future<_i3.Either<_i7.Failure, List<_i8.Movie>>>.value(
             _FakeEither_1<_i7.Failure, List<_i8.Movie>>(
           this,
           Invocation.method(
             #execute,
-            [query],
+            [
+              query,
+              page,
+            ],
           ),
         )),
       ) as _i6.Future<_i3.Either<_i7.Failure, List<_i8.Movie>>>);
@@ -110,11 +125,16 @@ class MockSearchSeries extends _i1.Mock implements _i9.SearchSeries {
       ) as _i4.SeriesRepository);
   @override
   _i6.Future<_i3.Either<_i7.Failure, List<_i10.Series>>> execute(
-          String? query) =>
+    String? query,
+    int? page,
+  ) =>
       (super.noSuchMethod(
         Invocation.method(
           #execute,
-          [query],
+          [
+            query,
+            page,
+          ],
         ),
         returnValue:
             _i6.Future<_i3.Either<_i7.Failure, List<_i10.Series>>>.value(
@@ -122,7 +142,182 @@ class MockSearchSeries extends _i1.Mock implements _i9.SearchSeries {
           this,
           Invocation.method(
             #execute,
-            [query],
+            [
+              query,
+              page,
+            ],
+          ),
+        )),
+      ) as _i6.Future<_i3.Either<_i7.Failure, List<_i10.Series>>>);
+}
+
+/// A class which mocks [NetworkInfo].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockNetworkInfo extends _i1.Mock implements _i11.NetworkInfo {
+  MockNetworkInfo() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i6.Future<bool> get isConnected => (super.noSuchMethod(
+        Invocation.getter(#isConnected),
+        returnValue: _i6.Future<bool>.value(false),
+      ) as _i6.Future<bool>);
+}
+
+/// A class which mocks [GetMovieGenres].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGetMovieGenres extends _i1.Mock implements _i12.GetMovieGenres {
+  MockGetMovieGenres() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.MovieRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeMovieRepository_0(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i2.MovieRepository);
+  @override
+  _i6.Future<_i3.Either<_i7.Failure, List<_i13.Genre>>> execute() =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #execute,
+          [],
+        ),
+        returnValue:
+            _i6.Future<_i3.Either<_i7.Failure, List<_i13.Genre>>>.value(
+                _FakeEither_1<_i7.Failure, List<_i13.Genre>>(
+          this,
+          Invocation.method(
+            #execute,
+            [],
+          ),
+        )),
+      ) as _i6.Future<_i3.Either<_i7.Failure, List<_i13.Genre>>>);
+}
+
+/// A class which mocks [GetSeriesGenres].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGetSeriesGenres extends _i1.Mock implements _i14.GetSeriesGenres {
+  MockGetSeriesGenres() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.SeriesRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeSeriesRepository_2(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i4.SeriesRepository);
+  @override
+  _i6.Future<_i3.Either<_i7.Failure, List<_i13.Genre>>> execute() =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #execute,
+          [],
+        ),
+        returnValue:
+            _i6.Future<_i3.Either<_i7.Failure, List<_i13.Genre>>>.value(
+                _FakeEither_1<_i7.Failure, List<_i13.Genre>>(
+          this,
+          Invocation.method(
+            #execute,
+            [],
+          ),
+        )),
+      ) as _i6.Future<_i3.Either<_i7.Failure, List<_i13.Genre>>>);
+}
+
+/// A class which mocks [GetMoviesByGenre].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGetMoviesByGenre extends _i1.Mock implements _i15.GetMoviesByGenre {
+  MockGetMoviesByGenre() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i2.MovieRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeMovieRepository_0(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i2.MovieRepository);
+  @override
+  _i6.Future<_i3.Either<_i7.Failure, List<_i8.Movie>>> execute(
+    int? genreId,
+    int? page,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #execute,
+          [
+            genreId,
+            page,
+          ],
+        ),
+        returnValue: _i6.Future<_i3.Either<_i7.Failure, List<_i8.Movie>>>.value(
+            _FakeEither_1<_i7.Failure, List<_i8.Movie>>(
+          this,
+          Invocation.method(
+            #execute,
+            [
+              genreId,
+              page,
+            ],
+          ),
+        )),
+      ) as _i6.Future<_i3.Either<_i7.Failure, List<_i8.Movie>>>);
+}
+
+/// A class which mocks [GetSeriesByGenre].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockGetSeriesByGenre extends _i1.Mock implements _i16.GetSeriesByGenre {
+  MockGetSeriesByGenre() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.SeriesRepository get repository => (super.noSuchMethod(
+        Invocation.getter(#repository),
+        returnValue: _FakeSeriesRepository_2(
+          this,
+          Invocation.getter(#repository),
+        ),
+      ) as _i4.SeriesRepository);
+  @override
+  _i6.Future<_i3.Either<_i7.Failure, List<_i10.Series>>> execute(
+    int? genreId,
+    int? page,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #execute,
+          [
+            genreId,
+            page,
+          ],
+        ),
+        returnValue:
+            _i6.Future<_i3.Either<_i7.Failure, List<_i10.Series>>>.value(
+                _FakeEither_1<_i7.Failure, List<_i10.Series>>(
+          this,
+          Invocation.method(
+            #execute,
+            [
+              genreId,
+              page,
+            ],
           ),
         )),
       ) as _i6.Future<_i3.Either<_i7.Failure, List<_i10.Series>>>);

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:core/domain/entities/genre.dart';
 import 'package:dartz/dartz.dart';
 import 'package:watchlist/data/models/watchlist_table.dart';
 
@@ -135,9 +136,12 @@ class MovieRepositoryImpl implements MovieRepository {
   }
 
   @override
-  Future<Either<Failure, List<Movie>>> searchMovies(String query) async {
+  Future<Either<Failure, List<Movie>>> searchMovies(
+    String query,
+    int page,
+  ) async {
     try {
-      final result = await remoteDataSource.searchMovies(query);
+      final result = await remoteDataSource.searchMovies(query, page);
       return Right(result.map((model) => model.toEntity()).toList());
     } on ServerException {
       return Left(ServerFailure(''));
@@ -167,6 +171,31 @@ class MovieRepositoryImpl implements MovieRepository {
       return Right(result);
     } on DatabaseException catch (e) {
       return Left(DatabaseFailure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Movie>>> getMoviesByGenre(
+      int genreId, int page) async {
+    try {
+      final result = await remoteDataSource.getMoviesByGenre(genreId, page);
+      return Right(result.map((e) => e.toEntity()).toList());
+    } on ServerException {
+      return Left(ServerFailure(''));
+    } on SocketException {
+      return Left(ConnectionFailure('Failed to connect to the network'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<Genre>>> getMovieGenres() async {
+    try {
+      final result = await remoteDataSource.getMovieGenres();
+      return Right(result.map((e) => e.toEntity()).toList());
+    } on ServerException {
+      return Left(ServerFailure(''));
+    } on SocketException {
+      return Left(ConnectionFailure('Failed to connect to the network'));
     }
   }
 }

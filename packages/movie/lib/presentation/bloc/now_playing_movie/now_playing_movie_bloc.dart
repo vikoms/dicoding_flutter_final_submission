@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:movie/domain/usecases/get_now_playing_movies.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../../domain/entities/movie.dart';
 
@@ -111,6 +112,6 @@ class NowPlayingMovieBloc
           );
         }
       }
-    });
+    }, transformer: Utils.debounce(const Duration(milliseconds: 500)));
   }
 }

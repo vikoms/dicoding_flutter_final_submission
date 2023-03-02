@@ -42,44 +42,6 @@ void main() {
       PopularMovieLoaded(movies: tMovieList, hasReachedMax: true);
   final tErrorState = PopularMovieError(errorMessage: tError.message);
 
-  // blocTest<PopularMovieBloc, PopularMovieState>(
-  //     'emits [Loading,Loaded] when data movies is gotten successfully',
-  //     build: () {
-  //       when(mockGetPopularMovies.execute())
-  //           .thenAnswer((_) async => Right(tMovieList));
-  //       return popularMovieBloc;
-  //     },
-  //     act: (bloc) => bloc.add(OnGetPopularMovies()),
-  //     expect: () => [
-  //           PopularMovieLoading(),
-  //           PopularMovieLoaded(
-  //             movies: tMovieList,
-  //             hasReachedMax: false,
-  //           ),
-  //         ],
-  //     verify: (bloc) {
-  //       verify(mockGetPopularMovies.execute());
-  //     });
-
-  // blocTest<PopularMovieBloc, PopularMovieState>(
-  //     'emits [Loading,Error] when data movies is unsuccessfully',
-  //     build: () {
-  //       when(mockGetPopularMovies.execute()).thenAnswer(
-  //         (_) async => Left(
-  //           ServerFailure('Server Failure'),
-  //         ),
-  //       );
-  //       return popularMovieBloc;
-  //     },
-  //     act: (bloc) => bloc.add(OnGetPopularMovies()),
-  //     expect: () => [
-  //           PopularMovieLoading(),
-  //           PopularMovieError(errorMessage: 'Server Failure'),
-  //         ],
-  //     verify: (bloc) {
-  //       verify(mockGetPopularMovies.execute());
-  //     });
-
   blocTest<PopularMovieBloc, PopularMovieState>(
     'emits [Loading, Loaded] when OnGetPopularMovies event is added and network is connected',
     build: () {
@@ -88,6 +50,7 @@ void main() {
           .thenAnswer((_) async => Right(tMovieList));
       return popularMovieBloc;
     },
+    wait: const Duration(milliseconds: 500),
     act: (bloc) => bloc.add(OnGetPopularMovies()),
     expect: () => [tLoading, tLoaded],
   );
@@ -100,6 +63,7 @@ void main() {
           .thenAnswer((_) async => Left(tError));
       return popularMovieBloc;
     },
+    wait: const Duration(milliseconds: 500),
     act: (bloc) => bloc.add(OnGetPopularMovies()),
     expect: () => [tLoading, tErrorState],
   );
@@ -113,6 +77,7 @@ void main() {
       popularMovieBloc.emit(tLoaded);
       return popularMovieBloc;
     },
+    wait: const Duration(milliseconds: 500),
     act: (bloc) => bloc.add(OnGetPopularMovies()),
     expect: () => [tLoadedMax],
   );

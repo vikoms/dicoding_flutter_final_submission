@@ -42,6 +42,7 @@ void main() {
           nowPlayingSeriesBloc.emit(NowPlayingSeriesInitial());
           return nowPlayingSeriesBloc;
         },
+        wait: const Duration(milliseconds: 500),
         act: (bloc) => bloc.add(OnGetNowPlayingSeries()),
         expect: () => [
               NowPlayingSeriesLoading(),
@@ -64,6 +65,7 @@ void main() {
           nowPlayingSeriesBloc.emit(NowPlayingSeriesInitial());
           return nowPlayingSeriesBloc;
         },
+        wait: const Duration(milliseconds: 500),
         act: (bloc) => bloc.add(OnGetNowPlayingSeries()),
         expect: () => [
               NowPlayingSeriesLoading(),
@@ -88,6 +90,7 @@ void main() {
           ));
           return nowPlayingSeriesBloc;
         },
+        wait: const Duration(milliseconds: 500),
         act: (bloc) => bloc.add(OnGetNowPlayingSeries()),
         expect: () => [
               NowPlayingSeriesLoaded(
@@ -111,6 +114,7 @@ void main() {
           ));
           return nowPlayingSeriesBloc;
         },
+        wait: const Duration(milliseconds: 500),
         act: (bloc) => bloc.add(OnGetNowPlayingSeries()),
         expect: () => [
               NowPlayingSeriesLoaded(
@@ -137,6 +141,7 @@ void main() {
           ));
           return nowPlayingSeriesBloc;
         },
+        wait: const Duration(milliseconds: 500),
         act: (bloc) => bloc.add(OnGetNowPlayingSeries()),
         expect: () => [
               const NowPlayingSeriesError(errorMessage: 'Server Failure'),

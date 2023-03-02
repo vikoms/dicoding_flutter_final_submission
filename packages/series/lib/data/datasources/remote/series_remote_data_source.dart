@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:core/core.dart';
+import 'package:core/data/models/genre_model.dart';
+import 'package:core/data/models/genre_response.dart';
 import 'package:http/http.dart' as http;
 
 import '../../models/series_detail_model.dart';
@@ -14,8 +16,16 @@ abstract class SeriesRemoteDataSource {
   Future<List<SeriesModel>> getPopularSeries({int page = 1});
   Future<SeriesDetailResponse> getDetailSeries(int id);
   Future<List<SeriesModel>> getTopRatedSeries();
-  Future<List<SeriesModel>> searchSeries(String query);
+  Future<List<SeriesModel>> searchSeries({
+    required String query,
+    int page = 1,
+  });
   Future<List<SeriesModel>> getRecomendationSeries(int id);
+  Future<List<GenreModel>> getSeriesGenres();
+  Future<List<SeriesModel>> getSeriesByGenre({
+    required int genreId,
+    int page = 1,
+  });
 }
 
 class SeriesRemoteDataSourceImpl implements SeriesRemoteDataSource {
@@ -67,9 +77,10 @@ class SeriesRemoteDataSourceImpl implements SeriesRemoteDataSource {
   }
 
   @override
-  Future<List<SeriesModel>> searchSeries(String query) async {
+  Future<List<SeriesModel>> searchSeries(
+      {required String query, int page = 1}) async {
     final response = await client
-        .get(Uri.parse('$BASE_URL/search/tv?$API_KEY&query=$query'));
+        .get(Uri.parse('$BASE_URL/search/tv?$API_KEY&query=$query&page=$page'));
     if (response.statusCode == 200) {
       return SeriesResponse.fromJson(json.decode(response.body)).seriesList;
     } else {
@@ -83,6 +94,31 @@ class SeriesRemoteDataSourceImpl implements SeriesRemoteDataSource {
         .get(Uri.parse("$BASE_URL/tv/$id/recommendations?$API_KEY"));
     if (response.statusCode == 200) {
       return SeriesResponse.fromJson(json.decode(response.body)).seriesList;
+    } else {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<List<SeriesModel>> getSeriesByGenre({
+    required int genreId,
+    int page = 1,
+  }) async {
+    final response = await client.get(Uri.parse(
+        '$BASE_URL/discover/tv?$API_KEY&sort_by=popularity.desc&page=$page&with_genres=$genreId'));
+    if (response.statusCode == 200) {
+      return SeriesResponse.fromJson(json.decode(response.body)).seriesList;
+    } else {
+      throw ServerException();
+    }
+  }
+
+  @override
+  Future<List<GenreModel>> getSeriesGenres() async {
+    final response = await client
+        .get(Uri.parse("$BASE_URL/genre/tv/list?$API_KEY&language=en"));
+    if (response.statusCode == 200) {
+      return GenreResponse.fromJson(json.decode(response.body)).genres;
     } else {
       throw ServerException();
     }

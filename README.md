@@ -71,7 +71,7 @@ You can download the Moflix app from the Google Play Store:
 
 ## Contact
 
-If you have any questions or inquiries about Moflix, feel free to reach out to me at [your-email@example.com](mailto:your-email@example.com).
+If you have any questions or inquiries about Moflix, feel free to reach out to me at [VikoMS95@gmail.com](mailto:VikoMS95@gmail.com).
 
 ---
 

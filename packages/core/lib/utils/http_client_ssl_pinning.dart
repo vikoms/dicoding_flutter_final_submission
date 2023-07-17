@@ -2,10 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:http/io_client.dart';
-import 'package:http_interceptor/http/intercepted_client.dart';
 import 'package:http/http.dart' as http;
-
-import 'http_interceptor.dart';
 
 Future<SecurityContext> get globalContext async {
   final sslCert =
@@ -32,12 +29,12 @@ class HttpSSLPinning {
         (X509Certificate cert, String host, int port) => false;
 
     IOClient client = IOClient(httpClient);
-
-    return InterceptedClient.build(
-      client: client,
-      interceptors: [
-        LoggingInterceptor(),
-      ],
-    );
+    return client;
+    // return InterceptedClient.build(
+    //   client: client, interceptors: [],
+    //   interceptors: [
+    //     LoggingInterceptor(),
+    //   ],
+    // );
   }
 }

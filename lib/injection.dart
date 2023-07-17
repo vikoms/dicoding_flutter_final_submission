@@ -1,11 +1,9 @@
 import 'package:core/data/db/database_helper.dart';
-import 'package:core/utils/http_interceptor.dart';
 import 'package:core/utils/network_info.dart';
 import 'package:core/utils/http_client_ssl_pinning.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
-import 'package:http_interceptor/http_interceptor.dart';
 import 'package:movie/data/datasources/local/movie_local_data_source.dart';
 import 'package:movie/data/datasources/remote/movie_remote_data_source.dart';
 import 'package:movie/data/repositories/movie_repository_impl.dart';
@@ -301,10 +299,6 @@ void init() {
       locator(),
     ),
   );
-
-  http.Client client = InterceptedClient.build(interceptors: [
-    LoggingInterceptor(),
-  ]);
 
   // external
   locator.registerLazySingleton(() => HttpSSLPinning.client);
